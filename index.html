@@ -3,8 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <title>越进的高考志愿助手</title>
 <style>
 /* ===== CSS Custom Properties ===== */
@@ -1221,7 +1219,7 @@ Store._needsDataRefresh = function (list) {
     const dv = Store.get(KEYS.settings)?.dataVersion || 0;
     // Check if data has old demo IDs (10 unis) but new version has 60
     const oldDemoIds = list.filter(u => u.id && u.id.startsWith('demo-uni-'));
-    if (dv < 2 && oldDemoIds.length > 0 && oldDemoIds.length <= 10) {
+    if (dv < 3) {
         return true;
     }
     return false;
@@ -1229,7 +1227,7 @@ Store._needsDataRefresh = function (list) {
 
 Store._updateDataVersion = function () {
     const settings = Store.getSettings();
-    settings.dataVersion = 2;
+    settings.dataVersion = 3;
     Store.set(KEYS.settings, settings);
 };
 
