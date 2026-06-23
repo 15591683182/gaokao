@@ -906,7 +906,6 @@ textarea {
 
     <!-- Scripts in dependency order -->
 <script>
-// ===== js/utils.js =====
 // ===== UUID Generation =====
 function generateId() {
     if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -1086,7 +1085,6 @@ function currentYear() {
     return new Date().getFullYear();
 }
 
-// ===== js/store.js =====
 // ===== localStorage Data Store =====
 
 const Store = {};
@@ -1324,7 +1322,6 @@ Store.getUniversitiesWithCounts = function () {
     }));
 };
 
-// ===== js/models.js =====
 // ===== Data Models & Validation =====
 
 const Models = {};
@@ -1405,57 +1402,306 @@ Models.validateRecord = function (r) {
 // ===== Demo Data =====
 Models.getDemoData = function () {
     const unis = [
+        // ===== 北京 =====
         { id: 'demo-uni-1', name: '北京大学', type: '985', province: '北京', city: '北京' },
         { id: 'demo-uni-2', name: '清华大学', type: '985', province: '北京', city: '北京' },
-        { id: 'demo-uni-3', name: '浙江大学', type: '985', province: '浙江', city: '杭州' },
-        { id: 'demo-uni-4', name: '武汉大学', type: '985', province: '湖北', city: '武汉' },
-        { id: 'demo-uni-5', name: '华中科技大学', type: '985', province: '湖北', city: '武汉' },
-        { id: 'demo-uni-6', name: '中山大学', type: '985', province: '广东', city: '广州' },
-        { id: 'demo-uni-7', name: '华南理工大学', type: '985', province: '广东', city: '广州' },
-        { id: 'demo-uni-8', name: '深圳大学', type: '普通本科', province: '广东', city: '深圳' },
-        { id: 'demo-uni-9', name: '广东工业大学', type: '普通本科', province: '广东', city: '广州' },
-        { id: 'demo-uni-10', name: '暨南大学', type: '211', province: '广东', city: '广州' },
+        { id: 'demo-uni-3', name: '中国人民大学', type: '985', province: '北京', city: '北京' },
+        { id: 'demo-uni-4', name: '北京航空航天大学', type: '985', province: '北京', city: '北京' },
+        { id: 'demo-uni-5', name: '北京理工大学', type: '985', province: '北京', city: '北京' },
+        { id: 'demo-uni-6', name: '北京邮电大学', type: '211', province: '北京', city: '北京' },
+        { id: 'demo-uni-7', name: '中国政法大学', type: '211', province: '北京', city: '北京' },
+        { id: 'demo-uni-8', name: '北京交通大学', type: '211', province: '北京', city: '北京' },
+        // ===== 上海 =====
+        { id: 'demo-uni-9', name: '复旦大学', type: '985', province: '上海', city: '上海' },
+        { id: 'demo-uni-10', name: '上海交通大学', type: '985', province: '上海', city: '上海' },
+        { id: 'demo-uni-11', name: '同济大学', type: '985', province: '上海', city: '上海' },
+        { id: 'demo-uni-12', name: '华东师范大学', type: '985', province: '上海', city: '上海' },
+        { id: 'demo-uni-13', name: '上海财经大学', type: '211', province: '上海', city: '上海' },
+        { id: 'demo-uni-14', name: '华东理工大学', type: '211', province: '上海', city: '上海' },
+        { id: 'demo-uni-15', name: '上海大学', type: '211', province: '上海', city: '上海' },
+        // ===== 浙江 =====
+        { id: 'demo-uni-16', name: '浙江大学', type: '985', province: '浙江', city: '杭州' },
+        { id: 'demo-uni-17', name: '杭州电子科技大学', type: '普通本科', province: '浙江', city: '杭州' },
+        { id: 'demo-uni-18', name: '浙江工业大学', type: '普通本科', province: '浙江', city: '杭州' },
+        // ===== 江苏 =====
+        { id: 'demo-uni-19', name: '南京大学', type: '985', province: '江苏', city: '南京' },
+        { id: 'demo-uni-20', name: '东南大学', type: '985', province: '江苏', city: '南京' },
+        { id: 'demo-uni-21', name: '南京航空航天大学', type: '211', province: '江苏', city: '南京' },
+        { id: 'demo-uni-22', name: '苏州大学', type: '211', province: '江苏', city: '苏州' },
+        { id: 'demo-uni-23', name: '南京理工大学', type: '211', province: '江苏', city: '南京' },
+        // ===== 湖北 =====
+        { id: 'demo-uni-24', name: '武汉大学', type: '985', province: '湖北', city: '武汉' },
+        { id: 'demo-uni-25', name: '华中科技大学', type: '985', province: '湖北', city: '武汉' },
+        { id: 'demo-uni-26', name: '武汉理工大学', type: '211', province: '湖北', city: '武汉' },
+        { id: 'demo-uni-27', name: '华中师范大学', type: '211', province: '湖北', city: '武汉' },
+        // ===== 广东 =====
+        { id: 'demo-uni-28', name: '中山大学', type: '985', province: '广东', city: '广州' },
+        { id: 'demo-uni-29', name: '华南理工大学', type: '985', province: '广东', city: '广州' },
+        { id: 'demo-uni-30', name: '暨南大学', type: '211', province: '广东', city: '广州' },
+        { id: 'demo-uni-31', name: '华南师范大学', type: '211', province: '广东', city: '广州' },
+        { id: 'demo-uni-32', name: '深圳大学', type: '普通本科', province: '广东', city: '深圳' },
+        { id: 'demo-uni-33', name: '南方科技大学', type: '双一流', province: '广东', city: '深圳' },
+        { id: 'demo-uni-34', name: '广东工业大学', type: '普通本科', province: '广东', city: '广州' },
+        { id: 'demo-uni-35', name: '广州大学', type: '普通本科', province: '广东', city: '广州' },
+        // ===== 四川 =====
+        { id: 'demo-uni-36', name: '四川大学', type: '985', province: '四川', city: '成都' },
+        { id: 'demo-uni-37', name: '电子科技大学', type: '985', province: '四川', city: '成都' },
+        { id: 'demo-uni-38', name: '西南交通大学', type: '211', province: '四川', city: '成都' },
+        { id: 'demo-uni-39', name: '西南财经大学', type: '211', province: '四川', city: '成都' },
+        // ===== 陕西 =====
+        { id: 'demo-uni-40', name: '西安交通大学', type: '985', province: '陕西', city: '西安' },
+        { id: 'demo-uni-41', name: '西北工业大学', type: '985', province: '陕西', city: '西安' },
+        { id: 'demo-uni-42', name: '西安电子科技大学', type: '211', province: '陕西', city: '西安' },
+        // ===== 湖南 =====
+        { id: 'demo-uni-43', name: '中南大学', type: '985', province: '湖南', city: '长沙' },
+        { id: 'demo-uni-44', name: '湖南大学', type: '985', province: '湖南', city: '长沙' },
+        { id: 'demo-uni-45', name: '国防科技大学', type: '985', province: '湖南', city: '长沙' },
+        // ===== 天津 =====
+        { id: 'demo-uni-46', name: '南开大学', type: '985', province: '天津', city: '天津' },
+        { id: 'demo-uni-47', name: '天津大学', type: '985', province: '天津', city: '天津' },
+        // ===== 安徽 =====
+        { id: 'demo-uni-48', name: '中国科学技术大学', type: '985', province: '安徽', city: '合肥' },
+        { id: 'demo-uni-49', name: '合肥工业大学', type: '211', province: '安徽', city: '合肥' },
+        // ===== 黑龙江 =====
+        { id: 'demo-uni-50', name: '哈尔滨工业大学', type: '985', province: '黑龙江', city: '哈尔滨' },
+        { id: 'demo-uni-51', name: '哈尔滨工程大学', type: '211', province: '黑龙江', city: '哈尔滨' },
+        // ===== 吉林 =====
+        { id: 'demo-uni-52', name: '吉林大学', type: '985', province: '吉林', city: '长春' },
+        // ===== 辽宁 =====
+        { id: 'demo-uni-53', name: '大连理工大学', type: '985', province: '辽宁', city: '大连' },
+        { id: 'demo-uni-54', name: '东北大学', type: '985', province: '辽宁', city: '沈阳' },
+        // ===== 山东 =====
+        { id: 'demo-uni-55', name: '山东大学', type: '985', province: '山东', city: '济南' },
+        { id: 'demo-uni-56', name: '中国海洋大学', type: '985', province: '山东', city: '青岛' },
+        // ===== 福建 =====
+        { id: 'demo-uni-57', name: '厦门大学', type: '985', province: '福建', city: '厦门' },
+        // ===== 重庆 =====
+        { id: 'demo-uni-58', name: '重庆大学', type: '985', province: '重庆', city: '重庆' },
+        { id: 'demo-uni-59', name: '西南大学', type: '211', province: '重庆', city: '重庆' },
+        // ===== 甘肃 =====
+        { id: 'demo-uni-60', name: '兰州大学', type: '985', province: '甘肃', city: '兰州' },
     ];
 
     const records = [
-        // 北京大学
-        { id: 'demo-r-1', universityId: 'demo-uni-1', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 690, minRank: 120, avgScore: 695, avgRank: 95, subjectGroup: '101', subjectRequirements: '物理' },
-        { id: 'demo-r-2', universityId: 'demo-uni-1', majorName: '计算机科学与技术', year: 2024, batch: '本科批', minScore: 688, minRank: 115, avgScore: 693, avgRank: 90, subjectGroup: '101', subjectRequirements: '物理' },
-        { id: 'demo-r-3', universityId: 'demo-uni-1', majorName: '计算机科学与技术', year: 2023, batch: '本科批', minScore: 685, minRank: 130, avgScore: 690, avgRank: 105, subjectGroup: '101', subjectRequirements: '物理' },
-        // 清华大学
-        { id: 'demo-r-4', universityId: 'demo-uni-2', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 692, minRank: 100, avgScore: 697, avgRank: 80, subjectGroup: '201', subjectRequirements: '物理+化学' },
-        { id: 'demo-r-5', universityId: 'demo-uni-2', majorName: '电子信息工程', year: 2025, batch: '本科批', minScore: 688, minRank: 130, avgScore: 692, avgRank: 110, subjectGroup: '201', subjectRequirements: '物理' },
-        // 浙江大学
-        { id: 'demo-r-6', universityId: 'demo-uni-3', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 675, minRank: 850, avgScore: 680, avgRank: 750, subjectGroup: '301', subjectRequirements: '物理' },
-        { id: 'demo-r-7', universityId: 'demo-uni-3', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 680, minRank: 600, avgScore: 685, avgRank: 520, subjectGroup: '302', subjectRequirements: '物理+化学+生物' },
-        // 武汉大学
-        { id: 'demo-r-8', universityId: 'demo-uni-4', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 650, minRank: 3500, avgScore: 658, avgRank: 3100, subjectGroup: '401', subjectRequirements: '物理' },
-        { id: 'demo-r-9', universityId: 'demo-uni-4', majorName: '法学', year: 2025, batch: '本科批', minScore: 645, minRank: 4000, avgScore: 652, avgRank: 3600, subjectGroup: '402', subjectRequirements: '不限' },
-        // 华中科技大学
-        { id: 'demo-r-10', universityId: 'demo-uni-5', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 648, minRank: 3800, avgScore: 655, avgRank: 3400, subjectGroup: '501', subjectRequirements: '物理' },
-        { id: 'demo-r-11', universityId: 'demo-uni-5', majorName: '电气工程及其自动化', year: 2025, batch: '本科批', minScore: 640, minRank: 5000, avgScore: 646, avgRank: 4500, subjectGroup: '501', subjectRequirements: '物理' },
-        // 中山大学
-        { id: 'demo-r-12', universityId: 'demo-uni-6', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 645, minRank: 5200, avgScore: 652, avgRank: 4800, subjectGroup: '601', subjectRequirements: '物理+化学' },
-        { id: 'demo-r-13', universityId: 'demo-uni-6', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 660, minRank: 3800, avgScore: 668, avgRank: 3400, subjectGroup: '602', subjectRequirements: '物理+化学+生物' },
-        { id: 'demo-r-14', universityId: 'demo-uni-6', majorName: '工商管理', year: 2025, batch: '本科批', minScore: 630, minRank: 7500, avgScore: 638, avgRank: 6800, subjectGroup: '603', subjectRequirements: '不限' },
-        // 华南理工大学
-        { id: 'demo-r-15', universityId: 'demo-uni-7', majorName: '软件工程', year: 2025, batch: '本科批', minScore: 635, minRank: 6200, avgScore: 642, avgRank: 5500, subjectGroup: '701', subjectRequirements: '物理' },
-        { id: 'demo-r-16', universityId: 'demo-uni-7', majorName: '建筑学', year: 2025, batch: '本科批', minScore: 625, minRank: 8500, avgScore: 632, avgRank: 7800, subjectGroup: '702', subjectRequirements: '物理' },
-        // 深圳大学
-        { id: 'demo-r-17', universityId: 'demo-uni-8', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 610, minRank: 16000, avgScore: 620, avgRank: 14000, subjectGroup: '801', subjectRequirements: '物理' },
-        { id: 'demo-r-18', universityId: 'demo-uni-8', majorName: '金融学', year: 2025, batch: '本科批', minScore: 600, minRank: 20000, avgScore: 608, avgRank: 18500, subjectGroup: '802', subjectRequirements: '不限' },
-        // 广东工业大学
-        { id: 'demo-r-19', universityId: 'demo-uni-9', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 570, minRank: 45000, avgScore: 580, avgRank: 41000, subjectGroup: '901', subjectRequirements: '物理' },
-        { id: 'demo-r-20', universityId: 'demo-uni-9', majorName: '机械工程', year: 2025, batch: '本科批', minScore: 555, minRank: 55000, avgScore: 565, avgRank: 50000, subjectGroup: '901', subjectRequirements: '物理' },
-        // 暨南大学
-        { id: 'demo-r-21', universityId: 'demo-uni-10', majorName: '新闻学', year: 2025, batch: '本科批', minScore: 615, minRank: 15000, avgScore: 622, avgRank: 13500, subjectGroup: '1001', subjectRequirements: '不限' },
-        { id: 'demo-r-22', universityId: 'demo-uni-10', majorName: '金融学', year: 2025, batch: '本科批', minScore: 620, minRank: 13000, avgScore: 628, avgRank: 11500, subjectGroup: '1002', subjectRequirements: '物理' },
+        // === 北京大学 ===
+        { id: 'r-1', universityId: 'demo-uni-1', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 695, minRank: 80, avgScore: 700, avgRank: 60, subjectRequirements: '物理' },
+        { id: 'r-2', universityId: 'demo-uni-1', majorName: '经济学', year: 2025, batch: '本科批', minScore: 690, minRank: 120, avgScore: 695, avgRank: 100, subjectRequirements: '不限' },
+        { id: 'r-3', universityId: 'demo-uni-1', majorName: '法学', year: 2025, batch: '本科批', minScore: 688, minRank: 150, avgScore: 693, avgRank: 125, subjectRequirements: '不限' },
+        { id: 'r-4', universityId: 'demo-uni-1', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 692, minRank: 100, avgScore: 698, avgRank: 75, subjectRequirements: '物理+化学+生物' },
+        // === 清华大学 ===
+        { id: 'r-5', universityId: 'demo-uni-2', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 698, minRank: 60, avgScore: 702, avgRank: 45, subjectRequirements: '物理' },
+        { id: 'r-6', universityId: 'demo-uni-2', majorName: '电子信息工程', year: 2025, batch: '本科批', minScore: 693, minRank: 90, avgScore: 697, avgRank: 70, subjectRequirements: '物理' },
+        { id: 'r-7', universityId: 'demo-uni-2', majorName: '自动化', year: 2025, batch: '本科批', minScore: 690, minRank: 110, avgScore: 695, avgRank: 90, subjectRequirements: '物理' },
+        { id: 'r-8', universityId: 'demo-uni-2', majorName: '建筑学', year: 2025, batch: '本科批', minScore: 688, minRank: 140, avgScore: 692, avgRank: 120, subjectRequirements: '物理' },
+        // === 中国人民大学 ===
+        { id: 'r-9', universityId: 'demo-uni-3', majorName: '经济学', year: 2025, batch: '本科批', minScore: 678, minRank: 550, avgScore: 684, avgRank: 450, subjectRequirements: '不限' },
+        { id: 'r-10', universityId: 'demo-uni-3', majorName: '法学', year: 2025, batch: '本科批', minScore: 680, minRank: 500, avgScore: 686, avgRank: 420, subjectRequirements: '不限' },
+        { id: 'r-11', universityId: 'demo-uni-3', majorName: '新闻传播学', year: 2025, batch: '本科批', minScore: 672, minRank: 750, avgScore: 678, avgRank: 650, subjectRequirements: '不限' },
+        // === 北京航空航天大学 ===
+        { id: 'r-12', universityId: 'demo-uni-4', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 672, minRank: 800, avgScore: 678, avgRank: 700, subjectRequirements: '物理' },
+        { id: 'r-13', universityId: 'demo-uni-4', majorName: '飞行器设计与工程', year: 2025, batch: '本科批', minScore: 668, minRank: 1000, avgScore: 674, avgRank: 880, subjectRequirements: '物理' },
+        { id: 'r-14', universityId: 'demo-uni-4', majorName: '软件工程', year: 2025, batch: '本科批', minScore: 670, minRank: 900, avgScore: 676, avgRank: 780, subjectRequirements: '物理' },
+        // === 北京理工大学 ===
+        { id: 'r-15', universityId: 'demo-uni-5', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 665, minRank: 1300, avgScore: 672, avgRank: 1100, subjectRequirements: '物理' },
+        { id: 'r-16', universityId: 'demo-uni-5', majorName: '车辆工程', year: 2025, batch: '本科批', minScore: 658, minRank: 1800, avgScore: 664, avgRank: 1600, subjectRequirements: '物理' },
+        // === 北京邮电大学 ===
+        { id: 'r-17', universityId: 'demo-uni-6', majorName: '通信工程', year: 2025, batch: '本科批', minScore: 645, minRank: 4500, avgScore: 652, avgRank: 3800, subjectRequirements: '物理' },
+        { id: 'r-18', universityId: 'demo-uni-6', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 650, minRank: 3500, avgScore: 658, avgRank: 3000, subjectRequirements: '物理' },
+        { id: 'r-19', universityId: 'demo-uni-6', majorName: '人工智能', year: 2025, batch: '本科批', minScore: 648, minRank: 3800, avgScore: 655, avgRank: 3300, subjectRequirements: '物理' },
+        // === 中国政法大学 ===
+        { id: 'r-20', universityId: 'demo-uni-7', majorName: '法学', year: 2025, batch: '本科批', minScore: 655, minRank: 2500, avgScore: 662, avgRank: 2100, subjectRequirements: '不限' },
+        // === 北京交通大学 ===
+        { id: 'r-21', universityId: 'demo-uni-8', majorName: '交通运输', year: 2025, batch: '本科批', minScore: 630, minRank: 7500, avgScore: 638, avgRank: 6800, subjectRequirements: '物理' },
+        { id: 'r-22', universityId: 'demo-uni-8', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 635, minRank: 6200, avgScore: 642, avgRank: 5500, subjectRequirements: '物理' },
+        // === 复旦大学 ===
+        { id: 'r-23', universityId: 'demo-uni-9', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 685, minRank: 220, avgScore: 690, avgRank: 185, subjectRequirements: '物理' },
+        { id: 'r-24', universityId: 'demo-uni-9', majorName: '经济学', year: 2025, batch: '本科批', minScore: 682, minRank: 280, avgScore: 688, avgRank: 230, subjectRequirements: '不限' },
+        { id: 'r-25', universityId: 'demo-uni-9', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 688, minRank: 170, avgScore: 693, avgRank: 140, subjectRequirements: '物理+化学+生物' },
+        // === 上海交通大学 ===
+        { id: 'r-26', universityId: 'demo-uni-10', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 690, minRank: 130, avgScore: 695, avgRank: 105, subjectRequirements: '物理' },
+        { id: 'r-27', universityId: 'demo-uni-10', majorName: '机械工程', year: 2025, batch: '本科批', minScore: 682, minRank: 290, avgScore: 687, avgRank: 240, subjectRequirements: '物理' },
+        { id: 'r-28', universityId: 'demo-uni-10', majorName: '电子信息工程', year: 2025, batch: '本科批', minScore: 686, minRank: 200, avgScore: 691, avgRank: 170, subjectRequirements: '物理' },
+        // === 同济大学 ===
+        { id: 'r-29', universityId: 'demo-uni-11', majorName: '建筑学', year: 2025, batch: '本科批', minScore: 670, minRank: 850, avgScore: 678, avgRank: 720, subjectRequirements: '物理' },
+        { id: 'r-30', universityId: 'demo-uni-11', majorName: '土木工程', year: 2025, batch: '本科批', minScore: 660, minRank: 1500, avgScore: 668, avgRank: 1250, subjectRequirements: '物理' },
+        { id: 'r-31', universityId: 'demo-uni-11', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 668, minRank: 1000, avgScore: 675, avgRank: 850, subjectRequirements: '物理' },
+        // === 华东师范大学 ===
+        { id: 'r-32', universityId: 'demo-uni-12', majorName: '教育学', year: 2025, batch: '本科批', minScore: 655, minRank: 2800, avgScore: 662, avgRank: 2400, subjectRequirements: '不限' },
+        { id: 'r-33', universityId: 'demo-uni-12', majorName: '软件工程', year: 2025, batch: '本科批', minScore: 658, minRank: 2200, avgScore: 665, avgRank: 1850, subjectRequirements: '物理' },
+        // === 上海财经大学 ===
+        { id: 'r-34', universityId: 'demo-uni-13', majorName: '金融学', year: 2025, batch: '本科批', minScore: 665, minRank: 1400, avgScore: 672, avgRank: 1150, subjectRequirements: '不限' },
+        { id: 'r-35', universityId: 'demo-uni-13', majorName: '会计学', year: 2025, batch: '本科批', minScore: 660, minRank: 1700, avgScore: 667, avgRank: 1450, subjectRequirements: '不限' },
+        // === 华东理工大学 ===
+        { id: 'r-36', universityId: 'demo-uni-14', majorName: '化学工程与工艺', year: 2025, batch: '本科批', minScore: 630, minRank: 8000, avgScore: 638, avgRank: 7200, subjectRequirements: '化学' },
+        { id: 'r-37', universityId: 'demo-uni-14', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 638, minRank: 5800, avgScore: 645, avgRank: 5000, subjectRequirements: '物理' },
+        // === 上海大学 ===
+        { id: 'r-38', universityId: 'demo-uni-15', majorName: '社会学', year: 2025, batch: '本科批', minScore: 618, minRank: 13000, avgScore: 625, avgRank: 11500, subjectRequirements: '不限' },
+        { id: 'r-39', universityId: 'demo-uni-15', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 625, minRank: 9500, avgScore: 632, avgRank: 8200, subjectRequirements: '物理' },
+        // === 浙江大学 ===
+        { id: 'r-40', universityId: 'demo-uni-16', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 680, minRank: 450, avgScore: 686, avgRank: 380, subjectRequirements: '物理' },
+        { id: 'r-41', universityId: 'demo-uni-16', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 685, minRank: 300, avgScore: 690, avgRank: 250, subjectRequirements: '物理+化学+生物' },
+        { id: 'r-42', universityId: 'demo-uni-16', majorName: '电气工程及其自动化', year: 2025, batch: '本科批', minScore: 675, minRank: 650, avgScore: 680, avgRank: 550, subjectRequirements: '物理' },
+        { id: 'r-43', universityId: 'demo-uni-16', majorName: '数学与应用数学', year: 2025, batch: '本科批', minScore: 678, minRank: 520, avgScore: 683, avgRank: 440, subjectRequirements: '物理' },
+        // === 杭州电子科技大学 ===
+        { id: 'r-44', universityId: 'demo-uni-17', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 605, minRank: 21000, avgScore: 615, avgRank: 18000, subjectRequirements: '物理' },
+        { id: 'r-45', universityId: 'demo-uni-17', majorName: '电子信息工程', year: 2025, batch: '本科批', minScore: 600, minRank: 24000, avgScore: 610, avgRank: 21000, subjectRequirements: '物理' },
+        // === 浙江工业大学 ===
+        { id: 'r-46', universityId: 'demo-uni-18', majorName: '化学工程', year: 2025, batch: '本科批', minScore: 590, minRank: 32000, avgScore: 598, avgRank: 29000, subjectRequirements: '化学' },
+        // === 南京大学 ===
+        { id: 'r-47', universityId: 'demo-uni-19', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 680, minRank: 480, avgScore: 685, avgRank: 400, subjectRequirements: '物理' },
+        { id: 'r-48', universityId: 'demo-uni-19', majorName: '天文学', year: 2025, batch: '本科批', minScore: 675, minRank: 680, avgScore: 680, avgRank: 580, subjectRequirements: '物理' },
+        { id: 'r-49', universityId: 'demo-uni-19', majorName: '汉语言文学', year: 2025, batch: '本科批', minScore: 672, minRank: 780, avgScore: 678, avgRank: 660, subjectRequirements: '不限' },
+        // === 东南大学 ===
+        { id: 'r-50', universityId: 'demo-uni-20', majorName: '建筑学', year: 2025, batch: '本科批', minScore: 665, minRank: 1500, avgScore: 672, avgRank: 1250, subjectRequirements: '物理' },
+        { id: 'r-51', universityId: 'demo-uni-20', majorName: '信息工程', year: 2025, batch: '本科批', minScore: 662, minRank: 1850, avgScore: 668, avgRank: 1600, subjectRequirements: '物理' },
+        { id: 'r-52', universityId: 'demo-uni-20', majorName: '交通运输', year: 2025, batch: '本科批', minScore: 655, minRank: 2700, avgScore: 662, avgRank: 2300, subjectRequirements: '物理' },
+        // === 南京航空航天大学 ===
+        { id: 'r-53', universityId: 'demo-uni-21', majorName: '飞行器设计与工程', year: 2025, batch: '本科批', minScore: 640, minRank: 5500, avgScore: 648, avgRank: 4600, subjectRequirements: '物理' },
+        { id: 'r-54', universityId: 'demo-uni-21', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 642, minRank: 5000, avgScore: 650, avgRank: 4200, subjectRequirements: '物理' },
+        // === 苏州大学 ===
+        { id: 'r-55', universityId: 'demo-uni-22', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 640, minRank: 5800, avgScore: 648, avgRank: 5000, subjectRequirements: '物理+化学+生物' },
+        { id: 'r-56', universityId: 'demo-uni-22', majorName: '法学', year: 2025, batch: '本科批', minScore: 635, minRank: 7000, avgScore: 642, avgRank: 6200, subjectRequirements: '不限' },
+        // === 南京理工大学 ===
+        { id: 'r-57', universityId: 'demo-uni-23', majorName: '武器系统与工程', year: 2025, batch: '本科批', minScore: 635, minRank: 7200, avgScore: 642, avgRank: 6500, subjectRequirements: '物理' },
+        { id: 'r-58', universityId: 'demo-uni-23', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 640, minRank: 5600, avgScore: 648, avgRank: 4800, subjectRequirements: '物理' },
+        // === 武汉大学 ===
+        { id: 'r-59', universityId: 'demo-uni-24', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 655, minRank: 3000, avgScore: 662, avgRank: 2600, subjectRequirements: '物理' },
+        { id: 'r-60', universityId: 'demo-uni-24', majorName: '法学', year: 2025, batch: '本科批', minScore: 652, minRank: 3400, avgScore: 658, avgRank: 3000, subjectRequirements: '不限' },
+        { id: 'r-61', universityId: 'demo-uni-24', majorName: '测绘工程', year: 2025, batch: '本科批', minScore: 640, minRank: 5600, avgScore: 648, avgRank: 4800, subjectRequirements: '物理' },
+        { id: 'r-62', universityId: 'demo-uni-24', majorName: '新闻传播学', year: 2025, batch: '本科批', minScore: 648, minRank: 4000, avgScore: 654, avgRank: 3600, subjectRequirements: '不限' },
+        // === 华中科技大学 ===
+        { id: 'r-63', universityId: 'demo-uni-25', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 652, minRank: 3500, avgScore: 658, avgRank: 3100, subjectRequirements: '物理' },
+        { id: 'r-64', universityId: 'demo-uni-25', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 660, minRank: 2000, avgScore: 666, avgRank: 1700, subjectRequirements: '物理+化学+生物' },
+        { id: 'r-65', universityId: 'demo-uni-25', majorName: '电气工程及其自动化', year: 2025, batch: '本科批', minScore: 645, minRank: 4800, avgScore: 652, avgRank: 4200, subjectRequirements: '物理' },
+        // === 武汉理工大学 ===
+        { id: 'r-66', universityId: 'demo-uni-26', majorName: '材料科学与工程', year: 2025, batch: '本科批', minScore: 615, minRank: 15500, avgScore: 622, avgRank: 13500, subjectRequirements: '物理+化学' },
+        { id: 'r-67', universityId: 'demo-uni-26', majorName: '交通运输', year: 2025, batch: '本科批', minScore: 608, minRank: 19000, avgScore: 615, avgRank: 17000, subjectRequirements: '物理' },
+        // === 华中师范大学 ===
+        { id: 'r-68', universityId: 'demo-uni-27', majorName: '教育学', year: 2025, batch: '本科批', minScore: 620, minRank: 12500, avgScore: 628, avgRank: 10800, subjectRequirements: '不限' },
+        { id: 'r-69', universityId: 'demo-uni-27', majorName: '心理学', year: 2025, batch: '本科批', minScore: 625, minRank: 10500, avgScore: 632, avgRank: 9200, subjectRequirements: '不限' },
+        // === 中山大学 ===
+        { id: 'r-70', universityId: 'demo-uni-28', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 650, minRank: 4000, avgScore: 658, avgRank: 3400, subjectRequirements: '物理' },
+        { id: 'r-71', universityId: 'demo-uni-28', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 665, minRank: 1600, avgScore: 672, avgRank: 1300, subjectRequirements: '物理+化学+生物' },
+        { id: 'r-72', universityId: 'demo-uni-28', majorName: '工商管理', year: 2025, batch: '本科批', minScore: 638, minRank: 6500, avgScore: 645, avgRank: 5600, subjectRequirements: '不限' },
+        { id: 'r-73', universityId: 'demo-uni-28', majorName: '海洋科学', year: 2025, batch: '本科批', minScore: 632, minRank: 7800, avgScore: 640, avgRank: 6800, subjectRequirements: '物理' },
+        // === 华南理工大学 ===
+        { id: 'r-74', universityId: 'demo-uni-29', majorName: '软件工程', year: 2025, batch: '本科批', minScore: 640, minRank: 5800, avgScore: 648, avgRank: 5000, subjectRequirements: '物理' },
+        { id: 'r-75', universityId: 'demo-uni-29', majorName: '建筑学', year: 2025, batch: '本科批', minScore: 638, minRank: 6200, avgScore: 645, avgRank: 5400, subjectRequirements: '物理' },
+        { id: 'r-76', universityId: 'demo-uni-29', majorName: '食品科学与工程', year: 2025, batch: '本科批', minScore: 625, minRank: 9800, avgScore: 632, avgRank: 8600, subjectRequirements: '化学' },
+        // === 暨南大学 ===
+        { id: 'r-77', universityId: 'demo-uni-30', majorName: '新闻学', year: 2025, batch: '本科批', minScore: 620, minRank: 13000, avgScore: 628, avgRank: 11200, subjectRequirements: '不限' },
+        { id: 'r-78', universityId: 'demo-uni-30', majorName: '金融学', year: 2025, batch: '本科批', minScore: 628, minRank: 8800, avgScore: 635, avgRank: 7500, subjectRequirements: '不限' },
+        { id: 'r-79', universityId: 'demo-uni-30', majorName: '药学', year: 2025, batch: '本科批', minScore: 615, minRank: 15500, avgScore: 622, avgRank: 13500, subjectRequirements: '化学+生物' },
+        // === 华南师范大学 ===
+        { id: 'r-80', universityId: 'demo-uni-31', majorName: '心理学', year: 2025, batch: '本科批', minScore: 612, minRank: 17000, avgScore: 620, avgRank: 15000, subjectRequirements: '不限' },
+        { id: 'r-81', universityId: 'demo-uni-31', majorName: '物理学(师范)', year: 2025, batch: '本科批', minScore: 618, minRank: 14500, avgScore: 625, avgRank: 12500, subjectRequirements: '物理' },
+        // === 深圳大学 ===
+        { id: 'r-82', universityId: 'demo-uni-32', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 615, minRank: 16000, avgScore: 625, avgRank: 13800, subjectRequirements: '物理' },
+        { id: 'r-83', universityId: 'demo-uni-32', majorName: '金融学', year: 2025, batch: '本科批', minScore: 608, minRank: 19500, avgScore: 615, avgRank: 17500, subjectRequirements: '不限' },
+        { id: 'r-84', universityId: 'demo-uni-32', majorName: '建筑学', year: 2025, batch: '本科批', minScore: 610, minRank: 18000, avgScore: 618, avgRank: 16000, subjectRequirements: '物理' },
+        // === 南方科技大学 ===
+        { id: 'r-85', universityId: 'demo-uni-33', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 645, minRank: 5000, avgScore: 655, avgRank: 4000, subjectRequirements: '物理' },
+        { id: 'r-86', universityId: 'demo-uni-33', majorName: '物理学', year: 2025, batch: '本科批', minScore: 640, minRank: 5800, avgScore: 650, avgRank: 4800, subjectRequirements: '物理' },
+        // === 广东工业大学 ===
+        { id: 'r-87', universityId: 'demo-uni-34', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 575, minRank: 43000, avgScore: 585, avgRank: 39000, subjectRequirements: '物理' },
+        { id: 'r-88', universityId: 'demo-uni-34', majorName: '机械工程', year: 2025, batch: '本科批', minScore: 560, minRank: 52000, avgScore: 570, avgRank: 48000, subjectRequirements: '物理' },
+        { id: 'r-89', universityId: 'demo-uni-34', majorName: '自动化', year: 2025, batch: '本科批', minScore: 568, minRank: 48000, avgScore: 578, avgRank: 44000, subjectRequirements: '物理' },
+        // === 广州大学 ===
+        { id: 'r-90', universityId: 'demo-uni-35', majorName: '土木工程', year: 2025, batch: '本科批', minScore: 545, minRank: 65000, avgScore: 555, avgRank: 60000, subjectRequirements: '物理' },
+        { id: 'r-91', universityId: 'demo-uni-35', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 560, minRank: 53000, avgScore: 570, avgRank: 48000, subjectRequirements: '物理' },
+        // === 四川大学 ===
+        { id: 'r-92', universityId: 'demo-uni-36', majorName: '口腔医学', year: 2025, batch: '本科批', minScore: 675, minRank: 700, avgScore: 682, avgRank: 550, subjectRequirements: '物理+化学+生物' },
+        { id: 'r-93', universityId: 'demo-uni-36', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 645, minRank: 4800, avgScore: 652, avgRank: 4200, subjectRequirements: '物理' },
+        { id: 'r-94', universityId: 'demo-uni-36', majorName: '汉语言文学', year: 2025, batch: '本科批', minScore: 640, minRank: 5600, avgScore: 648, avgRank: 4800, subjectRequirements: '不限' },
+        // === 电子科技大学 ===
+        { id: 'r-95', universityId: 'demo-uni-37', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 658, minRank: 2400, avgScore: 665, avgRank: 2000, subjectRequirements: '物理' },
+        { id: 'r-96', universityId: 'demo-uni-37', majorName: '电子信息工程', year: 2025, batch: '本科批', minScore: 655, minRank: 2900, avgScore: 662, avgRank: 2500, subjectRequirements: '物理' },
+        { id: 'r-97', universityId: 'demo-uni-37', majorName: '通信工程', year: 2025, batch: '本科批', minScore: 652, minRank: 3300, avgScore: 658, avgRank: 2900, subjectRequirements: '物理' },
+        // === 西南交通大学 ===
+        { id: 'r-98', universityId: 'demo-uni-38', majorName: '交通运输', year: 2025, batch: '本科批', minScore: 620, minRank: 12800, avgScore: 628, avgRank: 11000, subjectRequirements: '物理' },
+        { id: 'r-99', universityId: 'demo-uni-38', majorName: '土木工程', year: 2025, batch: '本科批', minScore: 610, minRank: 18200, avgScore: 618, avgRank: 16000, subjectRequirements: '物理' },
+        // === 西南财经大学 ===
+        { id: 'r-100', universityId: 'demo-uni-39', majorName: '金融学', year: 2025, batch: '本科批', minScore: 635, minRank: 7000, avgScore: 642, avgRank: 6000, subjectRequirements: '不限' },
+        { id: 'r-101', universityId: 'demo-uni-39', majorName: '会计学', year: 2025, batch: '本科批', minScore: 630, minRank: 8000, avgScore: 638, avgRank: 7000, subjectRequirements: '不限' },
+        // === 西安交通大学 ===
+        { id: 'r-102', universityId: 'demo-uni-40', majorName: '电气工程及其自动化', year: 2025, batch: '本科批', minScore: 665, minRank: 1500, avgScore: 672, avgRank: 1250, subjectRequirements: '物理' },
+        { id: 'r-103', universityId: 'demo-uni-40', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 662, minRank: 1850, avgScore: 668, avgRank: 1600, subjectRequirements: '物理' },
+        { id: 'r-104', universityId: 'demo-uni-40', majorName: '能源与动力工程', year: 2025, batch: '本科批', minScore: 655, minRank: 2800, avgScore: 662, avgRank: 2400, subjectRequirements: '物理' },
+        // === 西北工业大学 ===
+        { id: 'r-105', universityId: 'demo-uni-41', majorName: '航空航天工程', year: 2025, batch: '本科批', minScore: 650, minRank: 3800, avgScore: 658, avgRank: 3200, subjectRequirements: '物理' },
+        { id: 'r-106', universityId: 'demo-uni-41', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 652, minRank: 3400, avgScore: 660, avgRank: 2900, subjectRequirements: '物理' },
+        // === 西安电子科技大学 ===
+        { id: 'r-107', universityId: 'demo-uni-42', majorName: '通信工程', year: 2025, batch: '本科批', minScore: 630, minRank: 7800, avgScore: 638, avgRank: 6800, subjectRequirements: '物理' },
+        { id: 'r-108', universityId: 'demo-uni-42', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 635, minRank: 6600, avgScore: 642, avgRank: 5800, subjectRequirements: '物理' },
+        { id: 'r-109', universityId: 'demo-uni-42', majorName: '网络空间安全', year: 2025, batch: '本科批', minScore: 632, minRank: 7300, avgScore: 640, avgRank: 6400, subjectRequirements: '物理' },
+        // === 中南大学 ===
+        { id: 'r-110', universityId: 'demo-uni-43', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 655, minRank: 2800, avgScore: 662, avgRank: 2400, subjectRequirements: '物理+化学+生物' },
+        { id: 'r-111', universityId: 'demo-uni-43', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 640, minRank: 5600, avgScore: 648, avgRank: 4800, subjectRequirements: '物理' },
+        { id: 'r-112', universityId: 'demo-uni-43', majorName: '交通运输', year: 2025, batch: '本科批', minScore: 632, minRank: 7500, avgScore: 640, avgRank: 6600, subjectRequirements: '物理' },
+        // === 湖南大学 ===
+        { id: 'r-113', universityId: 'demo-uni-44', majorName: '土木工程', year: 2025, batch: '本科批', minScore: 625, minRank: 10000, avgScore: 632, avgRank: 8800, subjectRequirements: '物理' },
+        { id: 'r-114', universityId: 'demo-uni-44', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 635, minRank: 6800, avgScore: 642, avgRank: 6000, subjectRequirements: '物理' },
+        // === 国防科技大学 ===
+        { id: 'r-115', universityId: 'demo-uni-45', majorName: '计算机科学与技术', year: 2025, batch: '提前批', minScore: 660, minRank: 2000, avgScore: 668, avgRank: 1600, subjectRequirements: '物理' },
+        // === 南开大学 ===
+        { id: 'r-116', universityId: 'demo-uni-46', majorName: '经济学', year: 2025, batch: '本科批', minScore: 665, minRank: 1500, avgScore: 672, avgRank: 1250, subjectRequirements: '不限' },
+        { id: 'r-117', universityId: 'demo-uni-46', majorName: '化学', year: 2025, batch: '本科批', minScore: 660, minRank: 1950, avgScore: 668, avgRank: 1650, subjectRequirements: '化学' },
+        { id: 'r-118', universityId: 'demo-uni-46', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 662, minRank: 1800, avgScore: 668, avgRank: 1550, subjectRequirements: '物理' },
+        // === 天津大学 ===
+        { id: 'r-119', universityId: 'demo-uni-47', majorName: '建筑学', year: 2025, batch: '本科批', minScore: 655, minRank: 2900, avgScore: 662, avgRank: 2500, subjectRequirements: '物理' },
+        { id: 'r-120', universityId: 'demo-uni-47', majorName: '化学工程', year: 2025, batch: '本科批', minScore: 645, minRank: 4700, avgScore: 652, avgRank: 4100, subjectRequirements: '化学' },
+        // === 中国科学技术大学 ===
+        { id: 'r-121', universityId: 'demo-uni-48', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 685, minRank: 280, avgScore: 690, avgRank: 230, subjectRequirements: '物理' },
+        { id: 'r-122', universityId: 'demo-uni-48', majorName: '物理学', year: 2025, batch: '本科批', minScore: 682, minRank: 320, avgScore: 688, avgRank: 260, subjectRequirements: '物理' },
+        { id: 'r-123', universityId: 'demo-uni-48', majorName: '数学与应用数学', year: 2025, batch: '本科批', minScore: 680, minRank: 400, avgScore: 686, avgRank: 340, subjectRequirements: '物理' },
+        // === 合肥工业大学 ===
+        { id: 'r-124', universityId: 'demo-uni-49', majorName: '车辆工程', year: 2025, batch: '本科批', minScore: 605, minRank: 21500, avgScore: 612, avgRank: 19500, subjectRequirements: '物理' },
+        // === 哈尔滨工业大学 ===
+        { id: 'r-125', universityId: 'demo-uni-50', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 662, minRank: 1800, avgScore: 668, avgRank: 1550, subjectRequirements: '物理' },
+        { id: 'r-126', universityId: 'demo-uni-50', majorName: '自动化', year: 2025, batch: '本科批', minScore: 658, minRank: 2200, avgScore: 664, avgRank: 1900, subjectRequirements: '物理' },
+        { id: 'r-127', universityId: 'demo-uni-50', majorName: '焊接技术与工程', year: 2025, batch: '本科批', minScore: 635, minRank: 7000, avgScore: 642, avgRank: 6200, subjectRequirements: '物理' },
+        // === 哈尔滨工程大学 ===
+        { id: 'r-128', universityId: 'demo-uni-51', majorName: '船舶与海洋工程', year: 2025, batch: '本科批', minScore: 610, minRank: 18500, avgScore: 618, avgRank: 16500, subjectRequirements: '物理' },
+        // === 吉林大学 ===
+        { id: 'r-129', universityId: 'demo-uni-52', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 632, minRank: 7600, avgScore: 640, avgRank: 6600, subjectRequirements: '物理' },
+        { id: 'r-130', universityId: 'demo-uni-52', majorName: '车辆工程', year: 2025, batch: '本科批', minScore: 625, minRank: 9800, avgScore: 632, avgRank: 8600, subjectRequirements: '物理' },
+        { id: 'r-131', universityId: 'demo-uni-52', majorName: '法学', year: 2025, batch: '本科批', minScore: 640, minRank: 5600, avgScore: 648, avgRank: 4800, subjectRequirements: '不限' },
+        { id: 'r-132', universityId: 'demo-uni-52', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 645, minRank: 4800, avgScore: 652, avgRank: 4100, subjectRequirements: '物理+化学+生物' },
+        // === 大连理工大学 ===
+        { id: 'r-133', universityId: 'demo-uni-53', majorName: '机械工程', year: 2025, batch: '本科批', minScore: 635, minRank: 7000, avgScore: 642, avgRank: 6100, subjectRequirements: '物理' },
+        { id: 'r-134', universityId: 'demo-uni-53', majorName: '软件工程', year: 2025, batch: '本科批', minScore: 640, minRank: 5600, avgScore: 648, avgRank: 4800, subjectRequirements: '物理' },
+        { id: 'r-135', universityId: 'demo-uni-53', majorName: '化学工程', year: 2025, batch: '本科批', minScore: 630, minRank: 7800, avgScore: 638, avgRank: 6800, subjectRequirements: '化学' },
+        // === 东北大学 ===
+        { id: 'r-136', universityId: 'demo-uni-54', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 630, minRank: 8000, avgScore: 638, avgRank: 7000, subjectRequirements: '物理' },
+        { id: 'r-137', universityId: 'demo-uni-54', majorName: '自动化', year: 2025, batch: '本科批', minScore: 625, minRank: 10000, avgScore: 632, avgRank: 8800, subjectRequirements: '物理' },
+        { id: 'r-138', universityId: 'demo-uni-54', majorName: '冶金工程', year: 2025, batch: '本科批', minScore: 610, minRank: 18500, avgScore: 618, avgRank: 16500, subjectRequirements: '化学' },
+        // === 山东大学 ===
+        { id: 'r-139', universityId: 'demo-uni-55', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 652, minRank: 3400, avgScore: 658, avgRank: 3000, subjectRequirements: '物理+化学+生物' },
+        { id: 'r-140', universityId: 'demo-uni-55', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 645, minRank: 4800, avgScore: 652, avgRank: 4200, subjectRequirements: '物理' },
+        { id: 'r-141', universityId: 'demo-uni-55', majorName: '中国语言文学', year: 2025, batch: '本科批', minScore: 638, minRank: 6200, avgScore: 645, avgRank: 5400, subjectRequirements: '不限' },
+        // === 中国海洋大学 ===
+        { id: 'r-142', universityId: 'demo-uni-56', majorName: '海洋科学', year: 2025, batch: '本科批', minScore: 625, minRank: 10000, avgScore: 632, avgRank: 8800, subjectRequirements: '物理' },
+        { id: 'r-143', universityId: 'demo-uni-56', majorName: '水产养殖', year: 2025, batch: '本科批', minScore: 608, minRank: 19500, avgScore: 615, avgRank: 17500, subjectRequirements: '生物' },
+        // === 厦门大学 ===
+        { id: 'r-144', universityId: 'demo-uni-57', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 648, minRank: 4200, avgScore: 655, avgRank: 3600, subjectRequirements: '物理' },
+        { id: 'r-145', universityId: 'demo-uni-57', majorName: '会计学', year: 2025, batch: '本科批', minScore: 650, minRank: 3800, avgScore: 658, avgRank: 3200, subjectRequirements: '不限' },
+        { id: 'r-146', universityId: 'demo-uni-57', majorName: '海洋科学', year: 2025, batch: '本科批', minScore: 640, minRank: 5600, avgScore: 648, avgRank: 4800, subjectRequirements: '物理' },
+        // === 重庆大学 ===
+        { id: 'r-147', universityId: 'demo-uni-58', majorName: '土木工程', year: 2025, batch: '本科批', minScore: 625, minRank: 10000, avgScore: 632, avgRank: 8800, subjectRequirements: '物理' },
+        { id: 'r-148', universityId: 'demo-uni-58', majorName: '电气工程及其自动化', year: 2025, batch: '本科批', minScore: 635, minRank: 7000, avgScore: 642, avgRank: 6100, subjectRequirements: '物理' },
+        { id: 'r-149', universityId: 'demo-uni-58', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 640, minRank: 5600, avgScore: 648, avgRank: 4800, subjectRequirements: '物理' },
+        // === 西南大学 ===
+        { id: 'r-150', universityId: 'demo-uni-59', majorName: '教育学', year: 2025, batch: '本科批', minScore: 608, minRank: 19500, avgScore: 615, avgRank: 17500, subjectRequirements: '不限' },
+        { id: 'r-151', universityId: 'demo-uni-59', majorName: '农学', year: 2025, batch: '本科批', minScore: 580, minRank: 38000, avgScore: 590, avgRank: 34000, subjectRequirements: '化学+生物' },
+        // === 兰州大学 ===
+        { id: 'r-152', universityId: 'demo-uni-60', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 615, minRank: 16000, avgScore: 622, avgRank: 14000, subjectRequirements: '物理' },
+        { id: 'r-153', universityId: 'demo-uni-60', majorName: '草业科学', year: 2025, batch: '本科批', minScore: 580, minRank: 38000, avgScore: 590, avgRank: 34000, subjectRequirements: '生物' },
+        { id: 'r-154', universityId: 'demo-uni-60', majorName: '化学', year: 2025, batch: '本科批', minScore: 600, minRank: 24000, avgScore: 608, avgRank: 22000, subjectRequirements: '化学' },
     ];
 
     return { universities: unis, records };
 };
 
-// ===== js/matcher.js =====
 // ===== Matching Engine =====
 
 const Matcher = {};
@@ -1709,7 +1955,6 @@ Matcher.tierLabel = function (tier) {
     return map[tier] || tier;
 };
 
-// ===== js/ui/dataEntry.js =====
 // ===== Data Entry Tab =====
 
 const DataEntry = {};
@@ -2174,7 +2419,6 @@ DataEntry._bindEvents = function () {
     });
 };
 
-// ===== js/ui/recommendations.js =====
 // ===== Recommendations Tab =====
 
 const Recommendations = {};
@@ -2374,7 +2618,6 @@ Recommendations._renderResultCard = function (r, tier) {
     return card;
 };
 
-// ===== js/ui/dataManage.js =====
 // ===== Data Management Tab =====
 
 const DataManage = {};
@@ -2743,7 +2986,6 @@ DataManage._buildCsv = function () {
     return '﻿' + rows.join('\n'); // BOM for Excel compatibility
 };
 
-// ===== js/ui/settings.js =====
 // ===== Settings Tab =====
 
 const Settings = {};
@@ -2971,7 +3213,6 @@ Settings._updateModeUI = function (mode) {
     }
 };
 
-// ===== js/app.js =====
 // ===== Application Bootstrap =====
 
 const App = {};
