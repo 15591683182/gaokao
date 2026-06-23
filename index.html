@@ -1142,14 +1142,31 @@ Store.setSettings = function (partial) {
 // ===== Universities =====
 Store.getUniversities = function () {
     let list = Store.get(KEYS.universities);
-    if (list === null) {
-        // First load: seed demo data
+    if (list === null || Store._needsDataRefresh(list)) {
+        // First load or outdated data: seed fresh demo data
         const demo = Models.getDemoData();
         Store.set(KEYS.universities, demo.universities);
         Store.set(KEYS.records, demo.records);
+        Store._updateDataVersion();
         return demo.universities;
     }
     return list || [];
+};
+
+Store._needsDataRefresh = function (list) {
+    const dv = Store.get(KEYS.settings)?.dataVersion || 0;
+    // Check if data has old demo IDs (10 unis) but new version has 60
+    const oldDemoIds = list.filter(u => u.id && u.id.startsWith('demo-uni-'));
+    if (dv < 2 && oldDemoIds.length > 0 && oldDemoIds.length <= 10) {
+        return true;
+    }
+    return false;
+};
+
+Store._updateDataVersion = function () {
+    const settings = Store.getSettings();
+    settings.dataVersion = 2;
+    Store.set(KEYS.settings, settings);
 };
 
 Store.addUniversity = function (data) {
