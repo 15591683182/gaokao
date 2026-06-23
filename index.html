@@ -1,0 +1,3083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>越进的高考志愿助手</title>
+<style>
+/* ===== CSS Custom Properties ===== */
+:root {
+    --color-primary: #1a73e8;
+    --color-primary-hover: #1557b0;
+    --color-primary-light: #e8f0fe;
+    --color-reach: #e53935;
+    --color-reach-light: #fdecea;
+    --color-reach-border: #f5c6cb;
+    --color-match: #f9a825;
+    --color-match-light: #fff8e1;
+    --color-match-border: #ffe082;
+    --color-safety: #43a047;
+    --color-safety-light: #e8f5e9;
+    --color-safety-border: #a5d6a7;
+    --color-bg: #f0f2f5;
+    --color-card: #ffffff;
+    --color-text: #212121;
+    --color-text-secondary: #757575;
+    --color-text-light: #9e9e9e;
+    --color-border: #e0e0e0;
+    --color-danger: #d32f2f;
+    --color-danger-hover: #b71c1c;
+    --radius: 8px;
+    --radius-sm: 4px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.12);
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+    font-size: 14px;
+    color: var(--color-text);
+    background: var(--color-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.6;
+}
+
+/* ===== Header ===== */
+.app-header {
+    background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
+    color: white;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    text-align: center;
+}
+.app-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+.app-subtitle {
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+/* ===== Tab Navigation ===== */
+.tab-nav {
+    display: flex;
+    background: var(--color-card);
+    border-bottom: 2px solid var(--color-border);
+    padding: 0 var(--spacing-md);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+}
+.tab-btn {
+    padding: 14px 24px;
+    border: none;
+    background: none;
+    font-size: 15px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+.tab-btn:hover {
+    color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+.tab-btn.active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+    font-weight: 600;
+}
+
+/* ===== Main Content ===== */
+.tab-content {
+    flex: 1;
+    padding: var(--spacing-lg);
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* ===== Status Bar ===== */
+.status-bar {
+    background: var(--color-card);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ===== Card ===== */
+.card {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
+}
+.card-header {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ===== Buttons ===== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    font-weight: 500;
+}
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.btn-primary {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+.btn-primary:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+}
+.btn-secondary {
+    background: white;
+    color: var(--color-text);
+    border-color: var(--color-border);
+}
+.btn-secondary:hover:not(:disabled) {
+    background: #f5f5f5;
+    border-color: #bdbdbd;
+}
+.btn-danger {
+    background: var(--color-danger);
+    color: white;
+    border-color: var(--color-danger);
+}
+.btn-danger:hover:not(:disabled) {
+    background: var(--color-danger-hover);
+}
+.btn-sm {
+    padding: 4px 10px;
+    font-size: 12px;
+}
+.btn-xs {
+    padding: 2px 8px;
+    font-size: 11px;
+}
+
+/* ===== Badges ===== */
+.badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+.badge-reach {
+    background: var(--color-reach-light);
+    color: var(--color-reach);
+    border: 1px solid var(--color-reach-border);
+}
+.badge-match {
+    background: var(--color-match-light);
+    color: #e65100;
+    border: 1px solid var(--color-match-border);
+}
+.badge-safety {
+    background: var(--color-safety-light);
+    color: var(--color-safety);
+    border: 1px solid var(--color-safety-border);
+}
+.badge-neutral {
+    background: #f5f5f5;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+}
+
+/* ===== Tables ===== */
+.table-wrap {
+    overflow-x: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+thead th {
+    background: #fafafa;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid var(--color-border);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+}
+thead th:hover {
+    background: #f0f0f0;
+}
+thead th .sort-arrow {
+    margin-left: 4px;
+    font-size: 10px;
+    opacity: 0.4;
+}
+thead th.sorted .sort-arrow {
+    opacity: 1;
+    color: var(--color-primary);
+}
+tbody td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f0f0f0;
+}
+tbody tr:hover {
+    background: #fafafa;
+}
+tbody tr:nth-child(even) {
+    background: #fcfcfc;
+}
+tbody tr:nth-child(even):hover {
+    background: #f5f5f5;
+}
+
+/* ===== Forms ===== */
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--color-text);
+}
+.form-group .hint {
+    font-size: 11px;
+    color: var(--color-text-light);
+    font-weight: normal;
+    margin-left: 4px;
+}
+input[type="text"],
+input[type="number"],
+input[type="file"],
+select,
+textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+    background: white;
+}
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+input.error,
+select.error {
+    border-color: var(--color-reach);
+}
+.form-error {
+    font-size: 12px;
+    color: var(--color-reach);
+    margin-top: 2px;
+}
+textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+.form-row {
+    display: flex;
+    gap: var(--spacing-md);
+}
+.form-row > * {
+    flex: 1;
+}
+
+/* ===== Modal ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.modal-box {
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    width: 90%;
+    max-width: 520px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--color-border);
+}
+.modal-title {
+    font-size: 16px;
+    font-weight: 600;
+}
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    padding: 0;
+    line-height: 1;
+}
+.modal-close:hover {
+    color: var(--color-text);
+}
+.modal-body {
+    padding: var(--spacing-lg);
+}
+.modal-footer {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-sm);
+}
+
+/* ===== Toast ===== */
+#toast-container {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.toast {
+    padding: 12px 20px;
+    border-radius: var(--radius-sm);
+    color: white;
+    font-size: 14px;
+    box-shadow: var(--shadow-md);
+    animation: toastIn 0.3s ease;
+    max-width: 350px;
+}
+.toast-success {
+    background: var(--color-safety);
+}
+.toast-error {
+    background: var(--color-reach);
+}
+.toast-info {
+    background: var(--color-primary);
+}
+@keyframes toastIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* ===== Split Panel ===== */
+.split-panel {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+.split-left {
+    flex: 3;
+    min-width: 0;
+}
+.split-right {
+    flex: 2;
+    min-width: 300px;
+}
+
+/* ===== Result Cards ===== */
+.tier-section {
+    margin-bottom: var(--spacing-lg);
+}
+.tier-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: var(--spacing-sm);
+}
+.tier-header.reach {
+    background: var(--color-reach-light);
+    color: var(--color-reach);
+    border-left: 4px solid var(--color-reach);
+}
+.tier-header.match {
+    background: var(--color-match-light);
+    color: #e65100;
+    border-left: 4px solid var(--color-match);
+}
+.tier-header.safety {
+    background: var(--color-safety-light);
+    color: var(--color-safety);
+    border-left: 4px solid var(--color-safety);
+}
+.tier-count {
+    margin-left: auto;
+    font-size: 13px;
+    opacity: 0.8;
+}
+.tier-body {
+    display: grid;
+    gap: var(--spacing-sm);
+}
+.tier-body.collapsed {
+    display: none;
+}
+
+.result-card {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: var(--spacing-md);
+    border-left: 3px solid var(--color-border);
+    transition: box-shadow 0.2s;
+}
+.result-card:hover {
+    box-shadow: var(--shadow-md);
+}
+.result-card.reach { border-left-color: var(--color-reach); }
+.result-card.match { border-left-color: var(--color-match); }
+.result-card.safety { border-left-color: var(--color-safety); }
+.result-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+}
+.result-card-title {
+    font-size: 15px;
+    font-weight: 600;
+}
+.result-card-major {
+    color: var(--color-primary);
+}
+.result-card-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+}
+.result-card-body .val {
+    font-weight: 600;
+    color: var(--color-text);
+}
+.result-card-body .diff-neg { color: var(--color-safety); }
+.result-card-body .diff-pos { color: var(--color-reach); }
+
+/* ===== Stats Cards ===== */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+.stat-card {
+    background: var(--color-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: var(--spacing-md);
+    text-align: center;
+}
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+.stat-label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    margin-top: 4px;
+}
+
+/* ===== Utilities ===== */
+.hidden { display: none !important; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-muted { color: var(--color-text-secondary); }
+.text-danger { color: var(--color-reach); }
+.text-success { color: var(--color-safety); }
+.mt-sm { margin-top: var(--spacing-sm); }
+.mt-md { margin-top: var(--spacing-md); }
+.mt-lg { margin-top: var(--spacing-lg); }
+.mb-sm { margin-bottom: var(--spacing-sm); }
+.mb-md { margin-bottom: var(--spacing-md); }
+.mb-lg { margin-bottom: var(--spacing-lg); }
+.flex-row { display: flex; align-items: center; gap: var(--spacing-sm); }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-sm { gap: var(--spacing-sm); }
+.gap-md { gap: var(--spacing-md); }
+.empty-state {
+    text-align: center;
+    padding: 48px 16px;
+    color: var(--color-text-secondary);
+}
+.empty-state .empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+.empty-state p {
+    margin-bottom: 8px;
+}
+.prompt-card {
+    background: var(--color-primary-light);
+    border: 1px solid #bbdefb;
+    border-radius: var(--radius);
+    padding: var(--spacing-lg);
+    text-align: center;
+    color: var(--color-primary-hover);
+}
+
+/* ===== Search/Filter Bar ===== */
+.toolbar {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--spacing-md);
+}
+.toolbar input,
+.toolbar select {
+    width: auto;
+    min-width: 150px;
+}
+.toolbar .spacer {
+    flex: 1;
+}
+.search-input {
+    flex: 1;
+    min-width: 200px;
+    max-width: 350px;
+}
+
+/* ===== Pagination ===== */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    margin-top: var(--spacing-md);
+}
+.pagination button {
+    padding: 6px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: white;
+    cursor: pointer;
+    font-size: 13px;
+}
+.pagination button.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+.pagination button:hover:not(.active):not(:disabled) {
+    background: #f0f0f0;
+}
+
+/* ===== Confidence Stars ===== */
+.confidence-stars {
+    color: #f9a825;
+    letter-spacing: 2px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+    .split-panel {
+        flex-direction: column;
+    }
+    .split-right {
+        min-width: 0;
+    }
+    .tab-btn {
+        padding: 12px 10px;
+        font-size: 12px;
+    }
+    .tab-content {
+        padding: var(--spacing-sm);
+    }
+    .form-row {
+        flex-direction: column;
+    }
+    .result-card-body {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Mobile-specific (phones) */
+@media (max-width: 600px) {
+    .app-header {
+        padding: var(--spacing-md);
+    }
+    .app-title {
+        font-size: 18px;
+    }
+    .app-subtitle {
+        font-size: 11px;
+    }
+    .tab-nav {
+        padding: 0 var(--spacing-xs);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .tab-btn {
+        padding: 10px 8px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+    .tab-content {
+        padding: var(--spacing-sm);
+    }
+    .card {
+        padding: var(--spacing-sm);
+        border-radius: var(--radius-sm);
+    }
+    .card-header {
+        font-size: 14px;
+        margin-bottom: var(--spacing-sm);
+    }
+    input[type="text"],
+    input[type="number"],
+    select {
+        font-size: 16px; /* prevent iOS zoom on focus */
+        padding: 10px 12px;
+    }
+    .btn {
+        padding: 10px 14px;
+        font-size: 14px;
+    }
+    .btn-sm {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    .toolbar {
+        flex-direction: column;
+    }
+    .toolbar input,
+    .toolbar select,
+    .search-input {
+        width: 100%;
+        max-width: none;
+    }
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-sm);
+    }
+    .stat-card {
+        padding: var(--spacing-sm);
+    }
+    .stat-value {
+        font-size: 22px;
+    }
+    .result-card-body {
+        grid-template-columns: 1fr;
+    }
+    .modal-box {
+        width: 95%;
+        max-height: 90vh;
+    }
+    /* Larger touch targets */
+    .tier-header {
+        padding: 14px 12px;
+    }
+    .checkbox-label,
+    .radio-label {
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+    .table-wrap {
+        font-size: 12px;
+    }
+    thead th, tbody td {
+        padding: 6px 8px;
+    }
+}
+
+/* ===== Print ===== */
+@media print {
+    .app-header, .tab-nav, .status-bar, .btn, .modal-overlay, #toast-container {
+        display: none !important;
+    }
+    .tab-content {
+        padding: 0;
+        max-width: 100%;
+    }
+    .result-card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
+
+/* ===== Danger Zone ===== */
+.danger-zone {
+    border: 1px solid var(--color-reach);
+    border-radius: var(--radius);
+    padding: var(--spacing-lg);
+    background: #fff5f5;
+}
+.danger-zone .card-header {
+    color: var(--color-reach);
+    border-bottom-color: var(--color-reach-border);
+}
+
+/* ===== Subject Checkboxes ===== */
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    user-select: none;
+    transition: all 0.2s;
+}
+.checkbox-label:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+.checkbox-label.checked {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+.checkbox-label input {
+    display: none;
+}
+
+/* ===== Radio Group ===== */
+.radio-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    user-select: none;
+    transition: all 0.2s;
+}
+.radio-label:hover {
+    border-color: var(--color-primary);
+}
+.radio-label.checked {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}
+.radio-label input {
+    display: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #c0c0c0;
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0;
+}
+</style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <h1 class="app-title">🎓 越进的高考志愿助手</h1>
+        <span class="app-subtitle">位次法智能匹配 · 冲刺/稳妥/保底一键分类</span>
+    </header>
+
+    <!-- Tab Navigation -->
+    <nav class="tab-nav" id="tab-nav">
+        <button class="tab-btn active" data-tab="data-entry">📝 数据录入</button>
+        <button class="tab-btn" data-tab="recommendations">🎯 志愿推荐</button>
+        <button class="tab-btn" data-tab="data-manage">📊 数据管理</button>
+        <button class="tab-btn" data-tab="settings">⚙️ 设置</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="tab-content" id="tab-content">
+        <!-- Content rendered dynamically by JS -->
+    </main>
+
+    <!-- Status Bar -->
+    <footer class="status-bar" id="status-bar">
+        <span>就绪</span>
+    </footer>
+
+    <!-- Modal Container -->
+    <div id="modal-container" class="modal-overlay hidden">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title"></h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+            <div class="modal-footer" id="modal-footer"></div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts in dependency order -->
+<script>
+// ===== js/utils.js =====
+// ===== UUID Generation =====
+function generateId() {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+        return crypto.randomUUID();
+    }
+    // Fallback for older browsers
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+// ===== Number Formatting =====
+function formatNumber(n) {
+    if (n == null || isNaN(n)) return '—';
+    return Number(n).toLocaleString('zh-CN');
+}
+
+// ===== Percentage Formatting (signed) =====
+function formatPercent(val, decimals = 1) {
+    if (val == null || isNaN(val)) return '—';
+    const sign = val > 0 ? '+' : '';
+    return sign + (val * 100).toFixed(decimals) + '%';
+}
+
+// ===== Diff Color Class =====
+function diffClass(val) {
+    if (val == null) return '';
+    return val > 0 ? 'diff-pos' : 'diff-neg';
+}
+
+// ===== Debounce =====
+function debounce(fn, delay) {
+    let timer;
+    return function (...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+}
+
+// ===== HTML Escape =====
+function escapeHtml(str) {
+    if (str == null) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+// ===== Modal =====
+let modalCallback = null;
+
+function showModal(title, bodyHtml, onConfirm, confirmText = '确认', cancelText = '取消') {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').innerHTML = bodyHtml;
+    const footer = document.getElementById('modal-footer');
+    footer.innerHTML = `
+        <button class="btn btn-secondary" id="modal-cancel-btn">${cancelText}</button>
+        <button class="btn btn-primary" id="modal-confirm-btn">${confirmText}</button>
+    `;
+    document.getElementById('modal-container').classList.remove('hidden');
+    modalCallback = onConfirm;
+
+    document.getElementById('modal-close').onclick = closeModal;
+    document.getElementById('modal-cancel-btn').onclick = closeModal;
+    document.getElementById('modal-confirm-btn').onclick = function () {
+        if (modalCallback) modalCallback();
+        closeModal();
+    };
+    document.getElementById('modal-container').onclick = function (e) {
+        if (e.target === this) closeModal();
+    };
+}
+
+function showConfirm(title, message, onConfirm) {
+    showModal(title, `<p>${escapeHtml(message)}</p>`, onConfirm, '确认', '取消');
+}
+
+function closeModal() {
+    document.getElementById('modal-container').classList.add('hidden');
+    modalCallback = null;
+}
+
+// ===== Toast =====
+function showToast(message, type = 'info', duration = 2500) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        toast.style.transition = 'all 0.3s';
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
+// ===== File Download =====
+function downloadFile(content, filename, mimeType = 'text/plain') {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+// ===== File Reader (Promise-based) =====
+function readFileAsText(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsText(file, 'UTF-8');
+    });
+}
+
+// ===== Province List =====
+const PROVINCE_LIST = [
+    '北京', '天津', '河北', '山西', '内蒙古',
+    '辽宁', '吉林', '黑龙江',
+    '上海', '江苏', '浙江', '安徽', '福建', '江西', '山东',
+    '河南', '湖北', '湖南', '广东', '广西', '海南',
+    '重庆', '四川', '贵州', '云南', '西藏',
+    '陕西', '甘肃', '青海', '宁夏', '新疆'
+];
+
+// ===== Subject Lists =====
+const SUBJECTS_ALL = ['物理', '历史', '化学', '生物', '政治', '地理'];
+const SUBJECTS_PRIMARY = ['物理', '历史'];
+const SUBJECTS_ELECTIVE = ['化学', '生物', '政治', '地理'];
+
+// ===== University Types =====
+const UNI_TYPES = ['985', '211', '双一流', '普通本科', '专科'];
+
+// ===== Batch Types =====
+const BATCH_TYPES = ['本科批', '本科一批', '本科二批', '专科批', '提前批'];
+
+// ===== Gaokao Modes =====
+const GAOKAO_MODES = ['3+1+2', '3+3', '传统文理'];
+
+// ===== DOM Helpers =====
+function $(selector, parent) {
+    return (parent || document).querySelector(selector);
+}
+
+function $$(selector, parent) {
+    return Array.from((parent || document).querySelectorAll(selector));
+}
+
+function createElement(tag, attrs = {}, ...children) {
+    const el = document.createElement(tag);
+    for (const [key, val] of Object.entries(attrs)) {
+        if (key === 'className') el.className = val;
+        else if (key === 'innerHTML') el.innerHTML = val;
+        else if (key === 'textContent') el.textContent = val;
+        else if (key.startsWith('on')) el.addEventListener(key.slice(2).toLowerCase(), val);
+        else el.setAttribute(key, val);
+    }
+    children.forEach(child => {
+        if (typeof child === 'string') el.appendChild(document.createTextNode(child));
+        else if (child instanceof Node) el.appendChild(child);
+    });
+    return el;
+}
+
+function clearElement(el) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+}
+
+// ===== Current Year =====
+function currentYear() {
+    return new Date().getFullYear();
+}
+
+// ===== js/store.js =====
+// ===== localStorage Data Store =====
+
+const Store = {};
+
+const KEYS = {
+    settings: 'gk_settings',
+    universities: 'gk_universities',
+    records: 'gk_records'
+};
+
+// ===== Generic Getters/Setters =====
+Store.get = function (key) {
+    try {
+        const raw = localStorage.getItem(key);
+        if (raw === null) return null;
+        return JSON.parse(raw);
+    } catch (e) {
+        console.error('Store.get error:', e);
+        return null;
+    }
+};
+
+Store.set = function (key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    } catch (e) {
+        if (e.name === 'QuotaExceededError' || e.toString().includes('quota')) {
+            showToast('存储空间不足！请导出数据后清理旧数据', 'error', 5000);
+        } else {
+            console.error('Store.set error:', e);
+        }
+    }
+};
+
+// ===== Settings =====
+Store.getSettings = function () {
+    const stored = Store.get(KEYS.settings);
+    const defaults = Models.getDefaultSettings();
+    if (stored) {
+        // Merge with defaults to add any new keys
+        return { ...defaults, ...stored, matchThresholds: { ...defaults.matchThresholds, ...(stored.matchThresholds || {}) } };
+    }
+    return defaults;
+};
+
+Store.setSettings = function (partial) {
+    const current = Store.getSettings();
+    const merged = { ...current, ...partial };
+    if (partial.matchThresholds) {
+        merged.matchThresholds = { ...current.matchThresholds, ...partial.matchThresholds };
+    }
+    Store.set(KEYS.settings, merged);
+};
+
+// ===== Universities =====
+Store.getUniversities = function () {
+    let list = Store.get(KEYS.universities);
+    if (list === null) {
+        // First load: seed demo data
+        const demo = Models.getDemoData();
+        Store.set(KEYS.universities, demo.universities);
+        Store.set(KEYS.records, demo.records);
+        return demo.universities;
+    }
+    return list || [];
+};
+
+Store.addUniversity = function (data) {
+    const u = Models.createUniversity(data);
+    const validation = Models.validateUniversity(u);
+    if (!validation.valid) {
+        return { error: validation.errors.join('；') };
+    }
+    const list = Store.getUniversities();
+    list.push(u);
+    Store.set(KEYS.universities, list);
+    return { university: u };
+};
+
+Store.updateUniversity = function (id, data) {
+    const list = Store.getUniversities();
+    const idx = list.findIndex(u => u.id === id);
+    if (idx === -1) return { error: '学校不存在' };
+    const updated = { ...list[idx], ...data, id };
+    const validation = Models.validateUniversity(updated);
+    if (!validation.valid) {
+        return { error: validation.errors.join('；') };
+    }
+    list[idx] = updated;
+    Store.set(KEYS.universities, list);
+    return { university: updated };
+};
+
+Store.deleteUniversity = function (id) {
+    const list = Store.getUniversities();
+    const idx = list.findIndex(u => u.id === id);
+    if (idx === -1) return { error: '学校不存在' };
+    list.splice(idx, 1);
+    Store.set(KEYS.universities, list);
+    // Cascade delete orphaned records
+    const records = Store.getRecords();
+    const filtered = records.filter(r => r.universityId !== id);
+    Store.set(KEYS.records, filtered);
+    return { deletedRecords: records.length - filtered.length };
+};
+
+Store.getUniversityById = function (id) {
+    return Store.getUniversities().find(u => u.id === id) || null;
+};
+
+Store.findUniversityByName = function (name) {
+    const n = name.trim().toLowerCase();
+    return Store.getUniversities().find(u => u.name.toLowerCase() === n) || null;
+};
+
+// ===== Records =====
+Store.getRecords = function (filter = {}) {
+    let records = Store.get(KEYS.records) || [];
+    if (filter.universityId) {
+        records = records.filter(r => r.universityId === filter.universityId);
+    }
+    if (filter.year) {
+        records = records.filter(r => r.year === filter.year);
+    }
+    if (filter.search) {
+        const q = filter.search.toLowerCase();
+        records = records.filter(r => {
+            const uni = Store.getUniversityById(r.universityId);
+            const uniName = uni ? uni.name.toLowerCase() : '';
+            return uniName.includes(q) || r.majorName.toLowerCase().includes(q);
+        });
+    }
+    // Default sort: year desc, then university name
+    records.sort((a, b) => {
+        if (a.year !== b.year) return b.year - a.year;
+        const uniA = Store.getUniversityById(a.universityId);
+        const uniB = Store.getUniversityById(b.universityId);
+        if (uniA && uniB) return uniA.name.localeCompare(uniB.name, 'zh');
+        return 0;
+    });
+    return records;
+};
+
+Store.addRecord = function (data) {
+    const r = Models.createRecord(data);
+    const validation = Models.validateRecord(r);
+    if (!validation.valid) {
+        return { error: validation.errors.join('；') };
+    }
+    // Verify university exists
+    if (r.universityId && !Store.getUniversityById(r.universityId)) {
+        return { error: '所选学校不存在' };
+    }
+    const list = Store.getRecords();
+    list.push(r);
+    Store.set(KEYS.records, list);
+    return { record: r };
+};
+
+Store.updateRecord = function (id, data) {
+    const list = Store.getRecords();
+    const idx = list.findIndex(r => r.id === id);
+    if (idx === -1) return { error: '记录不存在' };
+    const updated = { ...list[idx], ...data, id };
+    const validation = Models.validateRecord(updated);
+    if (!validation.valid) {
+        return { error: validation.errors.join('；') };
+    }
+    list[idx] = updated;
+    Store.set(KEYS.records, list);
+    return { record: updated };
+};
+
+Store.deleteRecord = function (id) {
+    const list = Store.getRecords();
+    const idx = list.findIndex(r => r.id === id);
+    if (idx === -1) return { error: '记录不存在' };
+    list.splice(idx, 1);
+    Store.set(KEYS.records, list);
+    return {};
+};
+
+// ===== Bulk Operations =====
+Store.exportAll = function () {
+    return {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        settings: Store.getSettings(),
+        universities: Store.getUniversities(),
+        records: Store.getRecords()
+    };
+};
+
+Store.importAll = function (data) {
+    if (!data || typeof data !== 'object') {
+        return { error: '无效的数据格式' };
+    }
+    if (!Array.isArray(data.universities) || !Array.isArray(data.records)) {
+        return { error: '数据格式不正确：缺少 universities 或 records 数组' };
+    }
+    // Validate all universities
+    const uniErrors = [];
+    data.universities.forEach((u, i) => {
+        const v = Models.validateUniversity(u);
+        if (!v.valid) uniErrors.push(`学校第${i + 1}行：${v.errors.join('；')}`);
+    });
+    if (uniErrors.length) {
+        return { error: uniErrors.join('\n') };
+    }
+    Store.set(KEYS.universities, data.universities);
+    Store.set(KEYS.records, data.records);
+    if (data.settings) {
+        Store.set(KEYS.settings, data.settings);
+    }
+    return {
+        ok: true,
+        stats: {
+            universities: data.universities.length,
+            records: data.records.length
+        }
+    };
+};
+
+Store.clearAll = function () {
+    Object.values(KEYS).forEach(k => localStorage.removeItem(k));
+};
+
+// ===== Helper: get unique universities with record counts =====
+Store.getUniversitiesWithCounts = function () {
+    const unis = Store.getUniversities();
+    const records = Store.getRecords();
+    return unis.map(u => ({
+        ...u,
+        recordCount: records.filter(r => r.universityId === u.id).length
+    }));
+};
+
+// ===== js/models.js =====
+// ===== Data Models & Validation =====
+
+const Models = {};
+
+// ===== Default Settings =====
+Models.getDefaultSettings = function () {
+    return {
+        province: '',
+        gaokaoMode: '3+1+2',
+        primarySubject: '物理',
+        electiveSubjects: ['化学', '生物'],
+        userScore: null,
+        userRank: null,
+        scoreType: 'estimated',
+        matchThresholds: {
+            reachMin: 0.03,
+            reachMax: 0.20,
+            safetyMax: -0.10
+        }
+    };
+};
+
+// ===== Create University =====
+Models.createUniversity = function (data) {
+    return {
+        id: data.id || generateId(),
+        name: (data.name || '').trim(),
+        type: data.type || '普通本科',
+        province: data.province || '',
+        city: data.city || '',
+        notes: data.notes || ''
+    };
+};
+
+// ===== Create AdmissionRecord =====
+Models.createRecord = function (data) {
+    return {
+        id: data.id || generateId(),
+        universityId: data.universityId || '',
+        majorName: (data.majorName || '').trim(),
+        year: parseInt(data.year) || currentYear(),
+        batch: data.batch || '本科批',
+        minScore: data.minScore != null ? parseInt(data.minScore) : null,
+        minRank: data.minRank != null ? parseInt(data.minRank) : null,
+        avgScore: data.avgScore != null ? parseInt(data.avgScore) : null,
+        avgRank: data.avgRank != null ? parseInt(data.avgRank) : null,
+        subjectGroup: data.subjectGroup || '',
+        subjectRequirements: data.subjectRequirements || '',
+        notes: data.notes || ''
+    };
+};
+
+// ===== Validate University =====
+Models.validateUniversity = function (u) {
+    const errors = [];
+    if (!u.name) errors.push('学校名称不能为空');
+    if (!u.province) errors.push('请选择所在省份');
+    return { valid: errors.length === 0, errors };
+};
+
+// ===== Validate Record =====
+Models.validateRecord = function (r) {
+    const errors = [];
+    if (!r.universityId) errors.push('请选择学校');
+    if (!r.majorName) errors.push('专业名称不能为空');
+    if (!r.year || r.year < 2000 || r.year > currentYear() + 1) {
+        errors.push(`年份需在 2000-${currentYear() + 1} 之间`);
+    }
+    if (r.minScore != null && (r.minScore < 0 || r.minScore > 900)) {
+        errors.push('最低分数范围异常');
+    }
+    if (r.minRank != null && r.minRank < 1) {
+        errors.push('最低位次必须大于0');
+    }
+    return { valid: errors.length === 0, errors };
+};
+
+// ===== Demo Data =====
+Models.getDemoData = function () {
+    const unis = [
+        { id: 'demo-uni-1', name: '北京大学', type: '985', province: '北京', city: '北京' },
+        { id: 'demo-uni-2', name: '清华大学', type: '985', province: '北京', city: '北京' },
+        { id: 'demo-uni-3', name: '浙江大学', type: '985', province: '浙江', city: '杭州' },
+        { id: 'demo-uni-4', name: '武汉大学', type: '985', province: '湖北', city: '武汉' },
+        { id: 'demo-uni-5', name: '华中科技大学', type: '985', province: '湖北', city: '武汉' },
+        { id: 'demo-uni-6', name: '中山大学', type: '985', province: '广东', city: '广州' },
+        { id: 'demo-uni-7', name: '华南理工大学', type: '985', province: '广东', city: '广州' },
+        { id: 'demo-uni-8', name: '深圳大学', type: '普通本科', province: '广东', city: '深圳' },
+        { id: 'demo-uni-9', name: '广东工业大学', type: '普通本科', province: '广东', city: '广州' },
+        { id: 'demo-uni-10', name: '暨南大学', type: '211', province: '广东', city: '广州' },
+    ];
+
+    const records = [
+        // 北京大学
+        { id: 'demo-r-1', universityId: 'demo-uni-1', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 690, minRank: 120, avgScore: 695, avgRank: 95, subjectGroup: '101', subjectRequirements: '物理' },
+        { id: 'demo-r-2', universityId: 'demo-uni-1', majorName: '计算机科学与技术', year: 2024, batch: '本科批', minScore: 688, minRank: 115, avgScore: 693, avgRank: 90, subjectGroup: '101', subjectRequirements: '物理' },
+        { id: 'demo-r-3', universityId: 'demo-uni-1', majorName: '计算机科学与技术', year: 2023, batch: '本科批', minScore: 685, minRank: 130, avgScore: 690, avgRank: 105, subjectGroup: '101', subjectRequirements: '物理' },
+        // 清华大学
+        { id: 'demo-r-4', universityId: 'demo-uni-2', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 692, minRank: 100, avgScore: 697, avgRank: 80, subjectGroup: '201', subjectRequirements: '物理+化学' },
+        { id: 'demo-r-5', universityId: 'demo-uni-2', majorName: '电子信息工程', year: 2025, batch: '本科批', minScore: 688, minRank: 130, avgScore: 692, avgRank: 110, subjectGroup: '201', subjectRequirements: '物理' },
+        // 浙江大学
+        { id: 'demo-r-6', universityId: 'demo-uni-3', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 675, minRank: 850, avgScore: 680, avgRank: 750, subjectGroup: '301', subjectRequirements: '物理' },
+        { id: 'demo-r-7', universityId: 'demo-uni-3', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 680, minRank: 600, avgScore: 685, avgRank: 520, subjectGroup: '302', subjectRequirements: '物理+化学+生物' },
+        // 武汉大学
+        { id: 'demo-r-8', universityId: 'demo-uni-4', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 650, minRank: 3500, avgScore: 658, avgRank: 3100, subjectGroup: '401', subjectRequirements: '物理' },
+        { id: 'demo-r-9', universityId: 'demo-uni-4', majorName: '法学', year: 2025, batch: '本科批', minScore: 645, minRank: 4000, avgScore: 652, avgRank: 3600, subjectGroup: '402', subjectRequirements: '不限' },
+        // 华中科技大学
+        { id: 'demo-r-10', universityId: 'demo-uni-5', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 648, minRank: 3800, avgScore: 655, avgRank: 3400, subjectGroup: '501', subjectRequirements: '物理' },
+        { id: 'demo-r-11', universityId: 'demo-uni-5', majorName: '电气工程及其自动化', year: 2025, batch: '本科批', minScore: 640, minRank: 5000, avgScore: 646, avgRank: 4500, subjectGroup: '501', subjectRequirements: '物理' },
+        // 中山大学
+        { id: 'demo-r-12', universityId: 'demo-uni-6', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 645, minRank: 5200, avgScore: 652, avgRank: 4800, subjectGroup: '601', subjectRequirements: '物理+化学' },
+        { id: 'demo-r-13', universityId: 'demo-uni-6', majorName: '临床医学', year: 2025, batch: '本科批', minScore: 660, minRank: 3800, avgScore: 668, avgRank: 3400, subjectGroup: '602', subjectRequirements: '物理+化学+生物' },
+        { id: 'demo-r-14', universityId: 'demo-uni-6', majorName: '工商管理', year: 2025, batch: '本科批', minScore: 630, minRank: 7500, avgScore: 638, avgRank: 6800, subjectGroup: '603', subjectRequirements: '不限' },
+        // 华南理工大学
+        { id: 'demo-r-15', universityId: 'demo-uni-7', majorName: '软件工程', year: 2025, batch: '本科批', minScore: 635, minRank: 6200, avgScore: 642, avgRank: 5500, subjectGroup: '701', subjectRequirements: '物理' },
+        { id: 'demo-r-16', universityId: 'demo-uni-7', majorName: '建筑学', year: 2025, batch: '本科批', minScore: 625, minRank: 8500, avgScore: 632, avgRank: 7800, subjectGroup: '702', subjectRequirements: '物理' },
+        // 深圳大学
+        { id: 'demo-r-17', universityId: 'demo-uni-8', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 610, minRank: 16000, avgScore: 620, avgRank: 14000, subjectGroup: '801', subjectRequirements: '物理' },
+        { id: 'demo-r-18', universityId: 'demo-uni-8', majorName: '金融学', year: 2025, batch: '本科批', minScore: 600, minRank: 20000, avgScore: 608, avgRank: 18500, subjectGroup: '802', subjectRequirements: '不限' },
+        // 广东工业大学
+        { id: 'demo-r-19', universityId: 'demo-uni-9', majorName: '计算机科学与技术', year: 2025, batch: '本科批', minScore: 570, minRank: 45000, avgScore: 580, avgRank: 41000, subjectGroup: '901', subjectRequirements: '物理' },
+        { id: 'demo-r-20', universityId: 'demo-uni-9', majorName: '机械工程', year: 2025, batch: '本科批', minScore: 555, minRank: 55000, avgScore: 565, avgRank: 50000, subjectGroup: '901', subjectRequirements: '物理' },
+        // 暨南大学
+        { id: 'demo-r-21', universityId: 'demo-uni-10', majorName: '新闻学', year: 2025, batch: '本科批', minScore: 615, minRank: 15000, avgScore: 622, avgRank: 13500, subjectGroup: '1001', subjectRequirements: '不限' },
+        { id: 'demo-r-22', universityId: 'demo-uni-10', majorName: '金融学', year: 2025, batch: '本科批', minScore: 620, minRank: 13000, avgScore: 628, avgRank: 11500, subjectGroup: '1002', subjectRequirements: '物理' },
+    ];
+
+    return { universities: unis, records };
+};
+
+// ===== js/matcher.js =====
+// ===== Matching Engine =====
+
+const Matcher = {};
+
+/**
+ * Generate recommendations based on user profile and historical records.
+ * @param {Object} settings - AppSettings from store
+ * @param {Array} records - All admission records
+ * @param {Array} universities - All universities
+ * @returns {Object} { reach: [], match: [], safety: [], meta: {...} }
+ */
+Matcher.generateRecommendations = function (settings, records, universities) {
+    const { userRank, userScore, electiveSubjects, matchThresholds } = settings;
+
+    if (userRank == null && userScore == null) {
+        return { reach: [], match: [], safety: [], meta: { error: '请先设置分数或位次' } };
+    }
+
+    // Build university lookup
+    const uniMap = {};
+    universities.forEach(u => { uniMap[u.id] = u; });
+
+    // Step 1: Filter by subject compatibility
+    let filtered = Matcher._filterBySubjects(records, electiveSubjects);
+
+    // Step 2: Group by (universityId, majorName)
+    const groups = Matcher._groupRecords(filtered);
+
+    // Step 3: Score each group
+    const results = [];
+    for (const key of Object.keys(groups)) {
+        const group = groups[key];
+        const [uniId, majorName] = key.split('|||');
+        const uni = uniMap[uniId];
+        if (!uni) continue;
+
+        const weighted = Matcher._weightedAverage(group);
+        const trend = Matcher._calculateTrend(group);
+        const confidence = Matcher._confidenceLevel(group);
+
+        // Primary matching: use rank
+        let rankDiffPercent = null;
+        let tier = null;
+        let matchBasis = 'rank'; // 'rank' | 'score' | 'none'
+
+        if (userRank != null && weighted.avgRank != null) {
+            rankDiffPercent = (userRank - weighted.avgRank) / weighted.avgRank;
+            // Apply trend correction
+            const correctedDiff = rankDiffPercent + trend;
+            tier = Matcher._classify(correctedDiff, matchThresholds);
+            matchBasis = 'rank';
+        } else if (userScore != null && weighted.avgScore != null) {
+            // Score fallback
+            const scoreDiff = userScore - weighted.avgScore;
+            // Use a rough mapping: 15 points ~ 3% rank diff
+            rankDiffPercent = -scoreDiff / weighted.avgScore;
+            tier = Matcher._classify(-scoreDiff / weighted.avgScore, matchThresholds);
+            matchBasis = 'score';
+            // Widen thresholds for score-based matching
+            if (scoreDiff > -10 && scoreDiff < 10) tier = 'match';
+            else if (scoreDiff >= -30 && scoreDiff < -10) tier = 'reach';
+            else if (scoreDiff > 10) tier = 'safety';
+        }
+
+        if (tier) {
+            results.push({
+                university: uni,
+                majorName: majorName,
+                tier: tier,
+                matchBasis: matchBasis,
+                weightedAvgRank: weighted.avgRank,
+                weightedAvgScore: weighted.avgScore,
+                rankDiffPercent: rankDiffPercent,
+                trend: trend,
+                trendDesc: Matcher._trendDesc(trend),
+                confidence: confidence,
+                confidenceStars: '★'.repeat(confidence) + '☆'.repeat(5 - confidence),
+                records: group.sort((a, b) => b.year - a.year),
+                years: group.map(r => r.year).sort((a, b) => b - a)
+            });
+        }
+    }
+
+    // Step 4: Split into tiers and sort
+    const reach = results
+        .filter(r => r.tier === 'reach')
+        .sort((a, b) => Math.abs(a.rankDiffPercent || 999) - Math.abs(b.rankDiffPercent || 999));
+
+    const match = results
+        .filter(r => r.tier === 'match')
+        .sort((a, b) => Math.abs(a.rankDiffPercent || 999) - Math.abs(b.rankDiffPercent || 999));
+
+    const safety = results
+        .filter(r => r.tier === 'safety')
+        .sort((a, b) => (a.rankDiffPercent || 0) - (b.rankDiffPercent || 0));
+
+    return {
+        reach,
+        match,
+        safety,
+        meta: {
+            totalRecords: records.length,
+            filteredCount: filtered.length,
+            groupsCount: Object.keys(groups).length,
+            resultCount: results.length,
+            basis: userRank != null ? 'rank' : 'score'
+        }
+    };
+};
+
+// ===== Filter records by subject compatibility =====
+Matcher._filterBySubjects = function (records, userSubjects) {
+    if (!userSubjects || userSubjects.length === 0) return records;
+
+    return records.filter(r => {
+        const req = (r.subjectRequirements || '').trim();
+        // "不限" or empty means no restriction
+        if (!req || req === '不限') return true;
+
+        // Parse requirements: "物理+化学+生物" or "物理/历史"
+        // Split by "+" since most requirements use AND logic
+        const reqSubjects = req.split(/[,，+\/]/).map(s => s.trim()).filter(Boolean);
+
+        if (reqSubjects.length === 0) return true;
+
+        // All required subjects must be in user's elective subjects
+        return reqSubjects.every(rs => userSubjects.some(us => us === rs));
+    });
+};
+
+// ===== Group records by university + major =====
+Matcher._groupRecords = function (records) {
+    const groups = {};
+    records.forEach(r => {
+        const key = r.universityId + '|||' + r.majorName;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(r);
+    });
+    return groups;
+};
+
+// ===== Weighted average of rank/score across years =====
+Matcher._weightedAverage = function (group) {
+    // Sort by year descending
+    const sorted = group.slice().sort((a, b) => b.year - a.year);
+    const currentYr = currentYear();
+
+    let totalWeight = 0;
+    let sumRank = 0;
+    let sumScore = 0;
+    let hasRank = false;
+    let hasScore = false;
+
+    sorted.forEach((r, i) => {
+        const age = currentYr - r.year;
+        let weight;
+        if (age <= 1) weight = 0.50;
+        else if (age === 2) weight = 0.30;
+        else if (age === 3) weight = 0.20;
+        else weight = 0.10; // older data gets minimal weight
+
+        totalWeight += weight;
+        if (r.minRank != null) {
+            sumRank += r.minRank * weight;
+            hasRank = true;
+        }
+        if (r.minScore != null) {
+            sumScore += r.minScore * weight;
+            hasScore = true;
+        }
+    });
+
+    return {
+        avgRank: hasRank ? Math.round(sumRank / totalWeight) : null,
+        avgScore: hasScore ? Math.round(sumScore / totalWeight) : null
+    };
+};
+
+// ===== Calculate trend in rank movement =====
+// Positive trend = ranks getting worse (school getting easier to enter)
+// Negative trend = ranks getting better (school getting harder to enter)
+Matcher._calculateTrend = function (group) {
+    const sorted = group.slice().sort((a, b) => a.year - b.year);
+    if (sorted.length < 2) return 0;
+
+    // Calculate year-over-year changes
+    const changes = [];
+    for (let i = 1; i < sorted.length; i++) {
+        const prev = sorted[i - 1];
+        const curr = sorted[i];
+        if (prev.minRank != null && curr.minRank != null) {
+            // If rank number increased = school got easier (positive)
+            const change = (curr.minRank - prev.minRank) / prev.minRank;
+            changes.push(change);
+        }
+    }
+
+    if (changes.length === 0) return 0;
+
+    const avgChange = changes.reduce((a, b) => a + b, 0) / changes.length;
+
+    // Cap at +/- 3%
+    return Math.max(-0.03, Math.min(0.03, avgChange));
+};
+
+// ===== Classify into tier based on rank difference =====
+Matcher._classify = function (rankDiffPercent, thresholds) {
+    const { reachMin, reachMax, safetyMax } = thresholds;
+    // rankDiffPercent > 0 means user rank is WORSE than historical
+    // rankDiffPercent < 0 means user rank is BETTER than historical
+    if (rankDiffPercent <= safetyMax) return 'safety';      // e.g. <= -10%, user is much better
+    if (rankDiffPercent >= reachMin && rankDiffPercent <= reachMax) return 'reach'; // e.g. 3%-20%, user is worse but reachable
+    if (rankDiffPercent > safetyMax && rankDiffPercent < reachMin) return 'match'; // e.g. -10% to 3%, close match
+    return null; // outside all thresholds
+};
+
+// ===== Confidence level based on data quantity and recency =====
+Matcher._confidenceLevel = function (group) {
+    const currentYr = currentYear();
+    const years = group.map(r => r.year);
+    const hasRecent = years.some(y => currentYr - y <= 1);
+    const count = group.length;
+
+    let confidence = 0;
+    if (count >= 3) confidence += 3;
+    else if (count >= 2) confidence += 2;
+    else confidence += 1;
+
+    if (hasRecent) confidence += 2;
+    else confidence += 1;
+
+    return Math.min(5, confidence);
+};
+
+// ===== Trend description =====
+Matcher._trendDesc = function (trend) {
+    if (trend > 0.01) return '↑ 变容易';
+    if (trend < -0.01) return '↓ 变难';
+    return '→ 稳定';
+};
+
+// ===== Get display info about a result =====
+Matcher.formatRankDiff = function (rankDiffPercent) {
+    if (rankDiffPercent == null) return '—';
+    const sign = rankDiffPercent > 0 ? '+' : '';
+    return sign + (rankDiffPercent * 100).toFixed(1) + '%';
+};
+
+Matcher.tierLabel = function (tier) {
+    const map = { reach: '冲刺', match: '稳妥', safety: '保底' };
+    return map[tier] || tier;
+};
+
+// ===== js/ui/dataEntry.js =====
+// ===== Data Entry Tab =====
+
+const DataEntry = {};
+
+DataEntry._state = {
+    filterUniId: '',
+    searchQuery: '',
+    sortField: 'year',
+    sortDir: 'desc',
+    page: 1,
+    pageSize: 50,
+    editRecordId: null
+};
+
+DataEntry.render = function (container) {
+    clearElement(container);
+
+    const records = Store.getRecords();
+
+    if (records.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">📋</div>
+                <h3>还没有录取数据</h3>
+                <p>点击下方按钮开始添加，或前往 <a href="#" onclick="App.switchTab('data-manage')" style="color:var(--color-primary)">数据管理</a> 导入CSV</p>
+                <br>
+                <button class="btn btn-primary" id="btn-start-add">+ 添加第一条录取记录</button>
+            </div>
+        `;
+        container.querySelector('#btn-start-add').onclick = function () {
+            DataEntry.render(container);
+        };
+        return;
+    }
+
+    DataEntry._renderSplitPanel(container);
+};
+
+DataEntry._renderSplitPanel = function (container) {
+    container.innerHTML = `
+        <div class="split-panel">
+            <div class="split-left">
+                <div class="card">
+                    <div class="card-header">
+                        <span>📋 录取记录</span>
+                        <span class="text-muted" style="font-weight:normal;font-size:13px" id="record-count-label"></span>
+                    </div>
+                    <div class="toolbar">
+                        <input type="text" class="search-input" id="record-search" placeholder="🔍 搜索学校或专业...">
+                        <select id="record-uni-filter">
+                            <option value="">全部学校</option>
+                        </select>
+                        <select id="record-year-filter">
+                            <option value="">全部年份</option>
+                        </select>
+                    </div>
+                    <div class="table-wrap">
+                        <table id="record-table">
+                            <thead>
+                                <tr>
+                                    <th data-sort="university">学校 <span class="sort-arrow">⇅</span></th>
+                                    <th data-sort="major">专业 <span class="sort-arrow">⇅</span></th>
+                                    <th data-sort="year">年份 <span class="sort-arrow">⇅</span></th>
+                                    <th data-sort="batch">批次 <span class="sort-arrow">⇅</span></th>
+                                    <th data-sort="minScore">最低分 <span class="sort-arrow">⇅</span></th>
+                                    <th data-sort="minRank">最低位次 <span class="sort-arrow">⇅</span></th>
+                                    <th data-sort="subjectRequirements">选科要求 <span class="sort-arrow">⇅</span></th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="record-tbody"></tbody>
+                        </table>
+                    </div>
+                    <div class="pagination" id="record-pagination"></div>
+                </div>
+            </div>
+            <div class="split-right">
+                <div class="card" id="record-form-card">
+                    <div class="card-header" id="form-header">✏️ 添加录取记录</div>
+                    <div id="record-form"></div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    DataEntry._populateFilters();
+    DataEntry._renderTable();
+    DataEntry._renderForm();
+    DataEntry._bindEvents();
+};
+
+DataEntry._populateFilters = function () {
+    const unis = Store.getUniversities();
+    const uniFilter = document.getElementById('record-uni-filter');
+    unis.forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u.id;
+        opt.textContent = u.name;
+        uniFilter.appendChild(opt);
+    });
+    uniFilter.value = DataEntry._state.filterUniId;
+
+    const records = Store.getRecords();
+    const years = [...new Set(records.map(r => r.year))].sort((a, b) => b - a);
+    const yearFilter = document.getElementById('record-year-filter');
+    years.forEach(y => {
+        const opt = document.createElement('option');
+        opt.value = y;
+        opt.textContent = y + '年';
+        yearFilter.appendChild(opt);
+    });
+};
+
+DataEntry._getFilteredRecords = function () {
+    const state = DataEntry._state;
+    let records = Store.getRecords({
+        universityId: state.filterUniId || undefined,
+        search: state.searchQuery || undefined
+    });
+    if (state._yearFilter) {
+        records = records.filter(r => r.year === state._yearFilter);
+    }
+    return records;
+};
+
+DataEntry._getSortedAndPaged = function () {
+    let records = DataEntry._getFilteredRecords();
+    const state = DataEntry._state;
+    const sf = state.sortField;
+
+    records.sort((a, b) => {
+        let va, vb;
+        if (sf === 'university') {
+            const ua = Store.getUniversityById(a.universityId);
+            const ub = Store.getUniversityById(b.universityId);
+            va = ua ? ua.name : '';
+            vb = ub ? ub.name : '';
+        } else if (sf === 'major') {
+            va = a.majorName;
+            vb = b.majorName;
+        } else {
+            va = a[sf];
+            vb = b[sf];
+        }
+        if (va == null) va = '';
+        if (vb == null) vb = '';
+        let cmp = 0;
+        if (typeof va === 'number') cmp = va - vb;
+        else cmp = String(va).localeCompare(String(vb), 'zh');
+        return state.sortDir === 'asc' ? cmp : -cmp;
+    });
+
+    const totalPages = Math.ceil(records.length / state.pageSize) || 1;
+    if (state.page > totalPages) state.page = totalPages;
+    const start = (state.page - 1) * state.pageSize;
+    const paged = records.slice(start, start + state.pageSize);
+    return { records: paged, total: records.length, totalPages, start };
+};
+
+DataEntry._renderTable = function () {
+    const { records, total, totalPages, start } = DataEntry._getSortedAndPaged();
+    const state = DataEntry._state;
+    const tbody = document.getElementById('record-tbody');
+    clearElement(tbody);
+
+    records.forEach((r, i) => {
+        const uni = Store.getUniversityById(r.universityId);
+        const uniName = uni ? uni.name : '(已删除)';
+        const row = createElement('tr', {},
+            createElement('td', { textContent: uniName }),
+            createElement('td', { textContent: r.majorName }),
+            createElement('td', { textContent: r.year + '年' }),
+            createElement('td', { textContent: r.batch || '—' }),
+            createElement('td', { textContent: formatNumber(r.minScore), className: 'text-right' }),
+            createElement('td', { textContent: formatNumber(r.minRank), className: 'text-right' }),
+            createElement('td', { textContent: r.subjectRequirements || '不限' }),
+            createElement('td', { className: 'flex-row gap-sm' },
+                createElement('button', {
+                    className: 'btn btn-sm btn-secondary',
+                    textContent: '编辑',
+                    onclick: () => DataEntry._editRecord(r.id)
+                }),
+                createElement('button', {
+                    className: 'btn btn-sm btn-danger',
+                    textContent: '删除',
+                    onclick: () => {
+                        showConfirm('确认删除', `确定要删除「${uniName} - ${r.majorName}（${r.year}年）」这条记录吗？`, () => {
+                            Store.deleteRecord(r.id);
+                            DataEntry._renderTable();
+                            DataEntry._updateCounts();
+                            App.updateStatusBar();
+                        });
+                    }
+                })
+            )
+        );
+        tbody.appendChild(row);
+    });
+
+    // Update count label
+    document.getElementById('record-count-label').textContent = `共 ${total} 条记录`;
+    if (total > state.pageSize) {
+        document.getElementById('record-count-label').textContent += `（第 ${start + 1}-${Math.min(start + state.pageSize, total)} 条）`;
+    }
+
+    // Update sort headers
+    $$('#record-table th[data-sort]').forEach(th => {
+        if (th.dataset.sort === state.sortField) {
+            th.classList.add('sorted');
+            th.querySelector('.sort-arrow').textContent = state.sortDir === 'asc' ? '▲' : '▼';
+        } else {
+            th.classList.remove('sorted');
+            th.querySelector('.sort-arrow').textContent = '⇅';
+        }
+    });
+
+    DataEntry._renderPagination(totalPages);
+};
+
+DataEntry._renderPagination = function (totalPages) {
+    const pag = document.getElementById('record-pagination');
+    if (totalPages <= 1) { pag.innerHTML = ''; return; }
+    const state = DataEntry._state;
+    let html = `<button ${state.page === 1 ? 'disabled' : ''} id="page-prev">上一页</button>`;
+    for (let p = 1; p <= totalPages; p++) {
+        if (totalPages > 7 && p > 2 && p < totalPages - 1 && Math.abs(p - state.page) > 1) {
+            if (p === 3) html += '<button disabled>…</button>';
+            continue;
+        }
+        html += `<button class="${p === state.page ? 'active' : ''}" data-page="${p}">${p}</button>`;
+    }
+    html += `<button ${state.page === totalPages ? 'disabled' : ''} id="page-next">下一页</button>`;
+    pag.innerHTML = html;
+    pag.querySelectorAll('button[data-page]').forEach(b => {
+        b.onclick = () => { DataEntry._state.page = parseInt(b.dataset.page); DataEntry._renderTable(); };
+    });
+    const prev = pag.querySelector('#page-prev');
+    const next = pag.querySelector('#page-next');
+    if (prev) prev.onclick = () => { if (state.page > 1) { state.page--; DataEntry._renderTable(); } };
+    if (next) next.onclick = () => { if (state.page < totalPages) { state.page++; DataEntry._renderTable(); } };
+};
+
+DataEntry._renderForm = function () {
+    const form = document.getElementById('record-form');
+    const editId = DataEntry._state.editRecordId;
+    const editRecord = editId ? Store.getRecords().find(r => r.id === editId) : null;
+    document.getElementById('form-header').textContent = editRecord ? '✏️ 编辑录取记录' : '✏️ 添加录取记录';
+
+    const unis = Store.getUniversities();
+    let uniOptions = unis.map(u => `<option value="${u.id}" ${editRecord && editRecord.universityId === u.id ? 'selected' : ''}>${escapeHtml(u.name)}</option>`).join('');
+
+    form.innerHTML = `
+        <div class="form-group">
+            <label>学校</label>
+            <div class="flex-row gap-sm">
+                <select id="form-uni-id" style="flex:1">${uniOptions}</select>
+                <button class="btn btn-sm btn-secondary" id="btn-new-uni">+ 新增学校</button>
+            </div>
+            <div class="form-error hidden" id="err-uniId"></div>
+        </div>
+        <div class="form-group">
+            <label>专业名称</label>
+            <input type="text" id="form-major" value="${escapeHtml(editRecord ? editRecord.majorName : '')}" placeholder="如：计算机科学与技术">
+            <div class="form-error hidden" id="err-major"></div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>年份</label>
+                <input type="number" id="form-year" value="${editRecord ? editRecord.year : currentYear()}" min="2000" max="${currentYear() + 1}">
+                <div class="form-error hidden" id="err-year"></div>
+            </div>
+            <div class="form-group">
+                <label>批次</label>
+                <select id="form-batch">${BATCH_TYPES.map(b => `<option value="${b}" ${editRecord && editRecord.batch === b ? 'selected' : ''}>${b}</option>`).join('')}</select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>最低录取分数</label>
+                <input type="number" id="form-minScore" value="${editRecord ? (editRecord.minScore || '') : ''}" placeholder="如：645" min="0" max="900">
+            </div>
+            <div class="form-group">
+                <label>最低录取位次 <span class="hint">★核心指标</span></label>
+                <input type="number" id="form-minRank" value="${editRecord ? (editRecord.minRank || '') : ''}" placeholder="如：5200">
+                <div class="form-error hidden" id="err-minRank"></div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>平均录取分数</label>
+                <input type="number" id="form-avgScore" value="${editRecord ? (editRecord.avgScore || '') : ''}" placeholder="可选" min="0" max="900">
+            </div>
+            <div class="form-group">
+                <label>平均录取位次</label>
+                <input type="number" id="form-avgRank" value="${editRecord ? (editRecord.avgRank || '') : ''}" placeholder="可选">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>专业组代码</label>
+                <input type="text" id="form-subjectGroup" value="${escapeHtml(editRecord ? editRecord.subjectGroup : '')}" placeholder="如：201">
+            </div>
+            <div class="form-group">
+                <label>选科要求</label>
+                <input type="text" id="form-subjectReq" value="${escapeHtml(editRecord ? editRecord.subjectRequirements : '')}" placeholder="如：物理+化学；不限则留空">
+            </div>
+        </div>
+        <div class="flex-row gap-sm mt-md">
+            <button class="btn btn-primary" id="btn-save-record">${editRecord ? '更新记录' : '保存记录'}</button>
+            ${editRecord ? '<button class="btn btn-secondary" id="btn-cancel-edit">取消编辑</button>' : ''}
+        </div>
+    `;
+
+    document.getElementById('btn-new-uni').onclick = DataEntry._showNewUniModal;
+    document.getElementById('btn-save-record').onclick = DataEntry._saveRecord;
+    const cancelBtn = document.getElementById('btn-cancel-edit');
+    if (cancelBtn) {
+        cancelBtn.onclick = () => {
+            DataEntry._state.editRecordId = null;
+            DataEntry._renderForm();
+        };
+    }
+};
+
+DataEntry._showNewUniModal = function () {
+    const types = UNI_TYPES.map(t => `<option value="${t}">${t}</option>`).join('');
+    const provinces = PROVINCE_LIST.map(p => `<option value="${p}">${p}</option>`).join('');
+    const body = `
+        <div class="form-group">
+            <label>学校名称 *</label>
+            <input type="text" id="modal-uni-name" placeholder="如：复旦大学">
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>层次</label>
+                <select id="modal-uni-type">${types}</select>
+            </div>
+            <div class="form-group">
+                <label>省份 *</label>
+                <select id="modal-uni-province">${provinces}</select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>城市</label>
+            <input type="text" id="modal-uni-city" placeholder="如：上海">
+        </div>
+    `;
+    showModal('新增学校', body, () => {
+        const data = {
+            name: document.getElementById('modal-uni-name').value,
+            type: document.getElementById('modal-uni-type').value,
+            province: document.getElementById('modal-uni-province').value,
+            city: document.getElementById('modal-uni-city').value
+        };
+        const result = Store.addUniversity(data);
+        if (result.error) {
+            showToast(result.error, 'error');
+            return;
+        }
+        showToast('学校已添加', 'success');
+        DataEntry._state.editRecordId = null;
+        const container = document.getElementById('tab-content');
+        DataEntry.render(container);
+    });
+};
+
+DataEntry._saveRecord = function () {
+    const data = {
+        universityId: document.getElementById('form-uni-id').value,
+        majorName: document.getElementById('form-major').value.trim(),
+        year: parseInt(document.getElementById('form-year').value),
+        batch: document.getElementById('form-batch').value,
+        minScore: document.getElementById('form-minScore').value ? parseInt(document.getElementById('form-minScore').value) : null,
+        minRank: document.getElementById('form-minRank').value ? parseInt(document.getElementById('form-minRank').value) : null,
+        avgScore: document.getElementById('form-avgScore').value ? parseInt(document.getElementById('form-avgScore').value) : null,
+        avgRank: document.getElementById('form-avgRank').value ? parseInt(document.getElementById('form-avgRank').value) : null,
+        subjectGroup: document.getElementById('form-subjectGroup').value.trim(),
+        subjectRequirements: document.getElementById('form-subjectReq').value.trim()
+    };
+
+    // Clear old errors
+    document.querySelectorAll('.form-error').forEach(el => { el.classList.add('hidden'); el.textContent = ''; });
+    document.querySelectorAll('#record-form input.error, #record-form select.error').forEach(el => el.classList.remove('error'));
+
+    let result;
+    const editId = DataEntry._state.editRecordId;
+    if (editId) {
+        result = Store.updateRecord(editId, data);
+    } else {
+        result = Store.addRecord(data);
+    }
+
+    if (result.error) {
+        showToast(result.error, 'error');
+        return;
+    }
+
+    showToast(editId ? '记录已更新' : '记录已添加', 'success');
+    DataEntry._state.editRecordId = null;
+    DataEntry._renderForm();
+    DataEntry._renderTable();
+    DataEntry._updateCounts();
+    App.updateStatusBar();
+};
+
+DataEntry._editRecord = function (id) {
+    DataEntry._state.editRecordId = id;
+    DataEntry._renderForm();
+    // Scroll to form
+    document.getElementById('record-form-card').scrollIntoView({ behavior: 'smooth' });
+};
+
+DataEntry._updateCounts = function () {
+    const label = document.getElementById('record-count-label');
+    if (label) {
+        const total = DataEntry._getFilteredRecords().length;
+        label.textContent = `共 ${total} 条记录`;
+    }
+};
+
+DataEntry._bindEvents = function () {
+    const state = DataEntry._state;
+
+    document.getElementById('record-search').oninput = debounce(function () {
+        state.searchQuery = this.value;
+        state.page = 1;
+        DataEntry._renderTable();
+    }, 300);
+
+    document.getElementById('record-uni-filter').onchange = function () {
+        state.filterUniId = this.value;
+        state.page = 1;
+        DataEntry._renderTable();
+    };
+
+    document.getElementById('record-year-filter').onchange = function () {
+        // We'll handle year filtering through the unified filter approach
+        const year = parseInt(this.value);
+        const records = Store.getRecords({ universityId: state.filterUniId || undefined, search: state.searchQuery || undefined });
+        if (year) {
+            // Apply year filter manually in the display
+            state._yearFilter = year;
+        } else {
+            state._yearFilter = null;
+        }
+        state.page = 1;
+        DataEntry._renderTable();
+    };
+
+    // Sortable headers
+    $$('#record-table th[data-sort]').forEach(th => {
+        th.onclick = () => {
+            const field = th.dataset.sort;
+            if (state.sortField === field) {
+                state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                state.sortField = field;
+                state.sortDir = 'asc';
+            }
+            DataEntry._renderTable();
+        };
+    });
+};
+
+// ===== js/ui/recommendations.js =====
+// ===== Recommendations Tab =====
+
+const Recommendations = {};
+
+Recommendations._state = {
+    collapsedTiers: {}
+};
+
+Recommendations.render = function (container) {
+    clearElement(container);
+    const settings = Store.getSettings();
+
+    // Check if user has set score/rank
+    if (settings.userScore == null && settings.userRank == null) {
+        container.innerHTML = `
+            <div class="prompt-card">
+                <h3>📝 尚未设置分数</h3>
+                <p>请先在 <a href="#" onclick="App.switchTab('settings')" style="color:var(--color-primary);font-weight:600">设置</a> 中输入你的高考分数和位次，<br>然后回来查看志愿推荐结果。</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Check if there's any data
+    const records = Store.getRecords();
+    const universities = Store.getUniversities();
+    if (records.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-icon">📋</div>
+                <h3>还没有录取数据</h3>
+                <p>请先在 <a href="#" onclick="App.switchTab('data-entry')" style="color:var(--color-primary)">数据录入</a> 中添加往年录取数据</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Run matching
+    const result = Matcher.generateRecommendations(settings, records, universities);
+
+    if (result.meta.error) {
+        container.innerHTML = `<div class="prompt-card"><h3>⚠️ ${result.meta.error}</h3></div>`;
+        return;
+    }
+
+    // Build UI
+    Recommendations._renderSummary(container, settings, result);
+    Recommendations._renderTiers(container, result);
+};
+
+Recommendations._renderSummary = function (container, settings, result) {
+    const summaryDiv = document.createElement('div');
+    summaryDiv.className = 'card';
+    summaryDiv.innerHTML = `
+        <div class="card-header">
+            <span>👤 我的信息</span>
+            <button class="btn btn-sm btn-secondary" onclick="App.switchTab('settings')">修改</button>
+        </div>
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-label">省份</div>
+                <div class="stat-value" style="font-size:18px">${escapeHtml(settings.province || '未设置')}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">选科</div>
+                <div class="stat-value" style="font-size:18px">${escapeHtml(settings.primarySubject ? settings.primarySubject + '+' : '')}${escapeHtml(settings.electiveSubjects.join('、'))}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">高考分数</div>
+                <div class="stat-value">${formatNumber(settings.userScore)}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">全省位次</div>
+                <div class="stat-value">${formatNumber(settings.userRank)}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">匹配依据</div>
+                <div class="stat-value" style="font-size:16px">${result.meta.basis === 'rank' ? '📊 位次法' : '📈 分数法'}</div>
+            </div>
+        </div>
+        <div class="text-muted" style="font-size:13px">
+            共 ${result.meta.totalRecords} 条录取记录，其中 ${result.meta.filteredCount} 条符合选科要求，
+            生成 ${result.meta.resultCount} 个匹配结果
+        </div>
+    `;
+    container.appendChild(summaryDiv);
+};
+
+Recommendations._renderTiers = function (container, result) {
+    const tiers = [
+        { key: 'reach', label: '🔴 冲刺', desc: '位次接近但略低于往年录取线，需要努把力', data: result.reach },
+        { key: 'match', label: '🟡 稳妥', desc: '位次与往年录取线相当，有较大把握', data: result.match },
+        { key: 'safety', label: '🟢 保底', desc: '位次明显高于往年录取线，基本稳上', data: result.safety }
+    ];
+
+    const resultsDiv = document.createElement('div');
+    resultsDiv.id = 'results-container';
+
+    tiers.forEach(tier => {
+        const section = document.createElement('div');
+        section.className = 'tier-section';
+
+        const collapsed = Recommendations._state.collapsedTiers[tier.key] || false;
+
+        section.innerHTML = `
+            <div class="tier-header ${tier.key}" data-tier="${tier.key}">
+                <span>${tier.label}</span>
+                <span style="font-weight:normal;font-size:13px;margin-left:8px">${tier.desc}</span>
+                <span class="tier-count">${tier.data.length} 个</span>
+            </div>
+            <div class="tier-body ${collapsed ? 'collapsed' : ''}" id="tier-body-${tier.key}">
+                ${tier.data.length === 0 ? '<div class="empty-state" style="padding:24px"><p>暂无匹配项</p></div>' : ''}
+            </div>
+        `;
+
+        // Render result cards
+        const body = section.querySelector('.tier-body');
+        tier.data.forEach(r => {
+            body.appendChild(Recommendations._renderResultCard(r, tier.key));
+        });
+
+        // Click to toggle collapse
+        section.querySelector('.tier-header').onclick = function () {
+            const key = this.dataset.tier;
+            Recommendations._state.collapsedTiers[key] = !Recommendations._state.collapsedTiers[key];
+            const tb = document.getElementById('tier-body-' + key);
+            if (tb) tb.classList.toggle('collapsed');
+        };
+
+        resultsDiv.appendChild(section);
+    });
+
+    container.appendChild(resultsDiv);
+
+    // Add print button
+    const printDiv = document.createElement('div');
+    printDiv.className = 'text-center mt-lg';
+    printDiv.innerHTML = '<button class="btn btn-secondary" onclick="window.print()">🖨️ 打印推荐结果</button>';
+    container.appendChild(printDiv);
+};
+
+Recommendations._renderResultCard = function (r, tier) {
+    const card = document.createElement('div');
+    card.className = `result-card ${tier}`;
+
+    const diffStr = Matcher.formatRankDiff(r.rankDiffPercent);
+    const diffCls = diffClass(r.rankDiffPercent);
+
+    let historyHtml = '';
+    r.records.forEach(rec => {
+        historyHtml += `
+            <div class="flex-row gap-sm" style="justify-content:space-between;padding:2px 0;border-bottom:1px dotted #eee">
+                <span><strong>${rec.year}年</strong></span>
+                <span>最低分: <strong>${formatNumber(rec.minScore)}</strong></span>
+                <span>最低位次: <strong>${formatNumber(rec.minRank)}</strong></span>
+                <span>${rec.batch || ''}</span>
+            </div>
+        `;
+    });
+
+    card.innerHTML = `
+        <div class="result-card-header">
+            <div>
+                <span class="result-card-title">${escapeHtml(r.university.name)}</span>
+                <span style="color:var(--color-text-secondary);font-size:12px;margin-left:4px">${escapeHtml(r.university.type)} · ${escapeHtml(r.university.city)}</span>
+                <br>
+                <span class="result-card-major" style="font-size:16px">📚 ${escapeHtml(r.majorName)}</span>
+            </div>
+            <span class="badge badge-${tier}">${Matcher.tierLabel(tier)}</span>
+        </div>
+        <div style="margin-bottom:8px;font-size:13px;color:var(--color-text-secondary)">
+            ${historyHtml}
+        </div>
+        <div class="result-card-body">
+            <div>
+                加权位次: <span class="val">${formatNumber(r.weightedAvgRank)}</span>
+                ${r.matchBasis === 'score' ? '<span class="badge badge-neutral" style="margin-left:4px">分数匹配</span>' : ''}
+            </div>
+            <div>
+                你的位次: <span class="val">${formatNumber(Store.getSettings().userRank)}</span>
+            </div>
+            <div>
+                位次差距: <span class="val ${diffCls}">${diffStr}</span>
+            </div>
+            <div>
+                趋势: <span class="val">${r.trendDesc}</span>
+            </div>
+            <div>
+                置信度: <span class="confidence-stars">${r.confidenceStars}</span>
+            </div>
+            <div>
+                选科要求: ${escapeHtml(r.records[0]?.subjectRequirements || '不限')}
+            </div>
+        </div>
+    `;
+
+    return card;
+};
+
+// ===== js/ui/dataManage.js =====
+// ===== Data Management Tab =====
+
+const DataManage = {};
+
+DataManage.render = function (container) {
+    clearElement(container);
+    const unis = Store.getUniversities();
+    const records = Store.getRecords();
+    const years = [...new Set(records.map(r => r.year))].sort((a, b) => a - b);
+    const provinces = [...new Set(unis.map(u => u.province).filter(Boolean))];
+
+    container.innerHTML = `
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-value">${unis.length}</div>
+                <div class="stat-label">收录学校</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${records.length}</div>
+                <div class="stat-label">录取记录</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${years.length ? years[0] + '—' + years[years.length - 1] : '—'}</div>
+                <div class="stat-label">年份范围</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">${provinces.length}</div>
+                <div class="stat-label">覆盖省份</div>
+            </div>
+        </div>
+
+        <!-- Import -->
+        <div class="card">
+            <div class="card-header">📥 导入数据</div>
+            <p class="text-muted mb-md">支持 CSV 和 JSON 格式。CSV 导入会自动按学校名称匹配已有学校，未匹配到的自动创建。</p>
+            <div class="flex-row gap-md flex-wrap">
+                <div>
+                    <label class="btn btn-secondary" style="cursor:pointer">
+                        📄 导入 CSV
+                        <input type="file" id="file-csv-import" accept=".csv" style="display:none">
+                    </label>
+                </div>
+                <div>
+                    <label class="btn btn-secondary" style="cursor:pointer">
+                        📦 导入 JSON
+                        <input type="file" id="file-json-import" accept=".json" style="display:none">
+                    </label>
+                </div>
+                <button class="btn btn-sm btn-secondary" id="btn-download-template">📋 下载CSV模板</button>
+            </div>
+            <div id="import-result" class="mt-md"></div>
+        </div>
+
+        <!-- CSV Format Docs -->
+        <div class="card">
+            <div class="card-header">📋 CSV 格式说明</div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>列名</th><th>必填</th><th>说明</th><th>示例</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>学校名称</td><td>✅</td><td>大学全称</td><td>中山大学</td></tr>
+                        <tr><td>专业名称</td><td>✅</td><td>专业全称</td><td>计算机科学与技术</td></tr>
+                        <tr><td>年份</td><td>✅</td><td>录取年份</td><td>2025</td></tr>
+                        <tr><td>批次</td><td></td><td>录取批次</td><td>本科批</td></tr>
+                        <tr><td>最低录取分数</td><td>✅</td><td>该专业最低分</td><td>645</td></tr>
+                        <tr><td>最低录取位次</td><td>✅</td><td>最低分对应位次（核心）</td><td>5200</td></tr>
+                        <tr><td>平均录取分数</td><td></td><td>平均分</td><td>652</td></tr>
+                        <tr><td>平均录取位次</td><td></td><td>平均位次</td><td>4800</td></tr>
+                        <tr><td>专业组</td><td></td><td>新高考专业组代码</td><td>201</td></tr>
+                        <tr><td>选科要求</td><td></td><td>如 物理+化学</td><td>物理+化学</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="text-muted mt-sm" style="font-size:12px">
+                ⚠️ 注意：文件须为 UTF-8 编码（Excel 中另存为 "CSV UTF-8" 格式）。列名需与上表一致。
+            </p>
+        </div>
+
+        <!-- Export -->
+        <div class="card">
+            <div class="card-header">📤 导出数据</div>
+            <p class="text-muted mb-md">导出所有数据，可用于备份或分享。</p>
+            <div class="flex-row gap-md">
+                <button class="btn btn-secondary" id="btn-export-csv">📄 导出为 CSV</button>
+                <button class="btn btn-secondary" id="btn-export-json">📦 导出为 JSON</button>
+            </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="danger-zone mt-lg">
+            <div class="card-header">⚠️ 危险操作</div>
+            <p class="text-muted mb-md">清空所有数据后不可恢复。建议先导出备份。</p>
+            <button class="btn btn-danger" id="btn-clear-all">🗑️ 清空所有数据</button>
+        </div>
+    `;
+
+    DataManage._bindEvents(container);
+};
+
+DataManage._bindEvents = function () {
+    // CSV Import
+    const csvInput = document.getElementById('file-csv-import');
+    if (csvInput) {
+        csvInput.onchange = async function () {
+            const file = this.files[0];
+            if (!file) return;
+            const result = await DataManage._importCsv(file);
+            document.getElementById('import-result').innerHTML = result;
+            this.value = '';
+            App.updateStatusBar();
+            DataManage.render(document.getElementById('tab-content'));
+        };
+    }
+
+    // JSON Import
+    const jsonInput = document.getElementById('file-json-import');
+    if (jsonInput) {
+        jsonInput.onchange = async function () {
+            const file = this.files[0];
+            if (!file) return;
+            try {
+                const text = await readFileAsText(file);
+                const data = JSON.parse(text);
+                const result = Store.importAll(data);
+                if (result.error) {
+                    document.getElementById('import-result').innerHTML = `<div class="prompt-card" style="border-color:var(--color-reach)"><strong>导入失败：</strong>${result.error}</div>`;
+                } else {
+                    document.getElementById('import-result').innerHTML = `<div class="prompt-card" style="border-color:var(--color-safety)">✅ 导入成功！学校 ${result.stats.universities} 所，录取记录 ${result.stats.records} 条</div>`;
+                    App.updateStatusBar();
+                    DataManage.render(document.getElementById('tab-content'));
+                }
+            } catch (e) {
+                document.getElementById('import-result').innerHTML = `<div class="prompt-card" style="border-color:var(--color-reach)"><strong>文件解析失败：</strong>${e.message}</div>`;
+            }
+        };
+    }
+
+    // CSV Export
+    document.getElementById('btn-export-csv').onclick = function () {
+        const csv = DataManage._buildCsv();
+        downloadFile(csv, 'gaokao-records.csv', 'text/csv;charset=UTF-8');
+        showToast('CSV 已导出', 'success');
+    };
+
+    // JSON Export
+    document.getElementById('btn-export-json').onclick = function () {
+        const data = Store.exportAll();
+        const json = JSON.stringify(data, null, 2);
+        downloadFile(json, 'gaokao-backup.json', 'application/json');
+        showToast('JSON 已导出', 'success');
+    };
+
+    // Template download
+    document.getElementById('btn-download-template').onclick = function () {
+        const header = '学校名称,专业名称,年份,批次,最低录取分数,最低录取位次,平均录取分数,平均录取位次,专业组,选科要求';
+        const example = '中山大学,计算机科学与技术,2025,本科批,645,5200,652,4800,201,物理+化学';
+        downloadFile('﻿' + header + '\n' + example, 'gaokao-template.csv', 'text/csv;charset=UTF-8');
+        showToast('模板已下载', 'info');
+    };
+
+    // Clear all
+    document.getElementById('btn-clear-all').onclick = function () {
+        showConfirm('⚠️ 确认清空', '此操作将删除所有学校、录取记录和设置数据，不可恢复！\n\n建议先导出备份。\n\n确定要继续吗？', () => {
+            Store.clearAll();
+            showToast('所有数据已清空', 'info');
+            DataManage.render(document.getElementById('tab-content'));
+            App.updateStatusBar();
+        });
+    };
+};
+
+// ===== CSV Import Logic =====
+DataManage._importCsv = async function (file) {
+    try {
+        const text = await readFileAsText(file);
+        const rows = DataManage._parseCsv(text);
+        if (rows.length < 2) {
+            return '<div class="prompt-card" style="border-color:var(--color-reach)">CSV 文件为空或只有表头</div>';
+        }
+
+        // Parse header
+        const header = rows[0].map(h => h.trim());
+        const idxMap = {};
+        const requiredCols = ['学校名称', '专业名称', '年份', '最低录取分数', '最低录取位次'];
+        const allCols = [...requiredCols, '批次', '平均录取分数', '平均录取位次', '专业组', '选科要求'];
+
+        allCols.forEach(col => {
+            const idx = header.findIndex(h => h === col);
+            if (idx >= 0) idxMap[col] = idx;
+        });
+
+        const missing = requiredCols.filter(c => !(c in idxMap));
+        if (missing.length > 0) {
+            return `<div class="prompt-card" style="border-color:var(--color-reach)">缺少必填列：${missing.join('、')}。表头当前列为：${header.join(', ')}</div>`;
+        }
+
+        let imported = 0;
+        let skipped = 0;
+        const errors = [];
+        const existingUnis = Store.getUniversities();
+
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            if (row.length === 0 || row.every(c => !c.trim())) continue; // skip empty rows
+
+            const uniName = (row[idxMap['学校名称']] || '').trim();
+            if (!uniName) { skipped++; errors.push(`第${i + 1}行：学校名称为空`); continue; }
+
+            // Find or create university
+            let uni = Store.findUniversityByName(uniName);
+            if (!uni) {
+                const result = Store.addUniversity({
+                    name: uniName,
+                    type: '普通本科',
+                    province: Store.getSettings().province || '',
+                    city: ''
+                });
+                if (result.error) {
+                    skipped++;
+                    errors.push(`第${i + 1}行：创建学校"${uniName}"失败 - ${result.error}`);
+                    continue;
+                }
+                uni = result.university;
+            }
+
+            const year = parseInt(row[idxMap['年份']]);
+            if (isNaN(year) || year < 2000 || year > currentYear() + 1) {
+                skipped++;
+                errors.push(`第${i + 1}行：年份"${row[idxMap['年份']]}"无效`);
+                continue;
+            }
+
+            const minScore = parseInt(row[idxMap['最低录取分数']]);
+            const minRank = parseInt(row[idxMap['最低录取位次']]);
+            if (isNaN(minScore) || isNaN(minRank)) {
+                skipped++;
+                errors.push(`第${i + 1}行：最低分或最低位次无效`);
+                continue;
+            }
+
+            const recordData = {
+                universityId: uni.id,
+                majorName: (row[idxMap['专业名称']] || '').trim(),
+                year: year,
+                batch: idxMap['批次'] != null ? (row[idxMap['批次']] || '').trim() : '本科批',
+                minScore: minScore,
+                minRank: minRank,
+                avgScore: idxMap['平均录取分数'] != null ? (parseInt(row[idxMap['平均录取分数']]) || null) : null,
+                avgRank: idxMap['平均录取位次'] != null ? (parseInt(row[idxMap['平均录取位次']]) || null) : null,
+                subjectGroup: idxMap['专业组'] != null ? (row[idxMap['专业组']] || '').trim() : '',
+                subjectRequirements: idxMap['选科要求'] != null ? (row[idxMap['选科要求']] || '').trim() : ''
+            };
+
+            const result = Store.addRecord(recordData);
+            if (result.error) {
+                skipped++;
+                errors.push(`第${i + 1}行：${result.error}`);
+            } else {
+                imported++;
+            }
+        }
+
+        let resultHtml = `<div class="prompt-card" style="border-color:${imported > 0 ? 'var(--color-safety)' : 'var(--color-reach)'}">`;
+        resultHtml += `✅ 成功导入 <strong>${imported}</strong> 条记录`;
+        if (skipped > 0) resultHtml += `，跳过 <strong>${skipped}</strong> 条`;
+        if (errors.length > 0 && errors.length <= 10) {
+            resultHtml += `<br><small class="text-muted">${errors.join('<br>')}</small>`;
+        } else if (errors.length > 10) {
+            resultHtml += `<br><small class="text-muted">前10条错误：<br>${errors.slice(0, 10).join('<br>')}<br>…还有 ${errors.length - 10} 条错误</small>`;
+        }
+        resultHtml += '</div>';
+        return resultHtml;
+    } catch (e) {
+        return `<div class="prompt-card" style="border-color:var(--color-reach)"><strong>CSV 解析失败：</strong>${e.message}</div>`;
+    }
+};
+
+// ===== CSV Parser (handles quoted fields, BOM, CRLF) =====
+DataManage._parseCsv = function (text) {
+    // Strip BOM
+    if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+    // Normalize line endings
+    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+    const rows = [];
+    let row = [];
+    let field = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        const next = text[i + 1];
+
+        if (inQuotes) {
+            if (ch === '"' && next === '"') {
+                field += '"';
+                i++;
+            } else if (ch === '"') {
+                inQuotes = false;
+            } else {
+                field += ch;
+            }
+        } else {
+            if (ch === '"') {
+                inQuotes = true;
+            } else if (ch === ',') {
+                row.push(field);
+                field = '';
+            } else if (ch === '\n') {
+                row.push(field);
+                field = '';
+                rows.push(row);
+                row = [];
+            } else {
+                field += ch;
+            }
+        }
+    }
+    // Last field/row
+    row.push(field);
+    if (row.length > 1 || row[0] !== '') {
+        rows.push(row);
+    }
+
+    return rows;
+};
+
+// ===== CSV Export =====
+DataManage._buildCsv = function () {
+    const header = '学校名称,专业名称,年份,批次,最低录取分数,最低录取位次,平均录取分数,平均录取位次,专业组,选科要求';
+    const records = Store.getRecords();
+    const unis = Store.getUniversities();
+    const uniMap = {};
+    unis.forEach(u => { uniMap[u.id] = u; });
+
+    const rows = [header];
+    records.forEach(r => {
+        const uni = uniMap[r.universityId];
+        const row = [
+            uni ? uni.name : '',
+            r.majorName,
+            r.year,
+            r.batch || '',
+            r.minScore != null ? r.minScore : '',
+            r.minRank != null ? r.minRank : '',
+            r.avgScore != null ? r.avgScore : '',
+            r.avgRank != null ? r.avgRank : '',
+            r.subjectGroup || '',
+            r.subjectRequirements || ''
+        ].map(v => {
+            // Escape fields that contain commas or quotes
+            const s = String(v);
+            if (s.includes(',') || s.includes('"') || s.includes('\n')) {
+                return '"' + s.replace(/"/g, '""') + '"';
+            }
+            return s;
+        }).join(',');
+        rows.push(row);
+    });
+
+    return '﻿' + rows.join('\n'); // BOM for Excel compatibility
+};
+
+// ===== js/ui/settings.js =====
+// ===== Settings Tab =====
+
+const Settings = {};
+
+Settings.render = function (container) {
+    clearElement(container);
+    const s = Store.getSettings();
+
+    container.innerHTML = `
+        <div class="card">
+            <div class="card-header">📍 省份与高考模式</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>省份</label>
+                    <select id="set-province">
+                        <option value="">请选择省份</option>
+                        ${PROVINCE_LIST.map(p => `<option value="${p}" ${s.province === p ? 'selected' : ''}>${p}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>高考模式</label>
+                    <div class="radio-group" id="set-mode-group">
+                        ${GAOKAO_MODES.map(m => `
+                            <label class="radio-label ${s.gaokaoMode === m ? 'checked' : ''}">
+                                <input type="radio" name="gaokaoMode" value="${m}" ${s.gaokaoMode === m ? 'checked' : ''}> ${m}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            <div class="form-row" id="set-primary-row" style="${s.gaokaoMode === '3+3' ? 'display:none' : ''}">
+                <div class="form-group">
+                    <label>首选科目 ${s.gaokaoMode === '3+3' ? '' : '(3+1+2 中的 "1")'}</label>
+                    <div class="radio-group" id="set-primary-group">
+                        ${SUBJECTS_PRIMARY.map(sub => `
+                            <label class="radio-label ${s.primarySubject === sub ? 'checked' : ''}">
+                                <input type="radio" name="primarySubject" value="${sub}" ${s.primarySubject === sub ? 'checked' : ''}> ${sub}
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>选考科目 ${s.gaokaoMode === '3+1+2' ? '(3+1+2 中的 "2"，最多选2科)' : s.gaokaoMode === '3+3' ? '(最多选3科)' : ''}</label>
+                <div class="checkbox-group" id="set-elective-group">
+                    ${SUBJECTS_ELECTIVE.map(sub => `
+                        <label class="checkbox-label ${s.electiveSubjects.includes(sub) ? 'checked' : ''}">
+                            <input type="checkbox" value="${sub}" ${s.electiveSubjects.includes(sub) ? 'checked' : ''}> ${sub}
+                        </label>
+                    `).join('')}
+                </div>
+                <div class="form-error hidden" id="err-electives"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">🎯 分数与位次</div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>高考分数</label>
+                    <input type="number" id="set-score" value="${s.userScore || ''}" placeholder="输入你的高考分数" min="0" max="900">
+                </div>
+                <div class="form-group">
+                    <label>全省位次 <span class="hint">★推荐使用位次匹配</span></label>
+                    <input type="number" id="set-rank" value="${s.userRank || ''}" placeholder="输入你的全省排名" min="1">
+                </div>
+                <div class="form-group">
+                    <label>分数类型</label>
+                    <div class="radio-group">
+                        <label class="radio-label ${s.scoreType === 'estimated' ? 'checked' : ''}">
+                            <input type="radio" name="scoreType" value="estimated" ${s.scoreType === 'estimated' ? 'checked' : ''}> 估分
+                        </label>
+                        <label class="radio-label ${s.scoreType === 'actual' ? 'checked' : ''}">
+                            <input type="radio" name="scoreType" value="actual" ${s.scoreType === 'actual' ? 'checked' : ''}> 实际成绩
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">🎚️ 匹配阈值设置</div>
+            <p class="text-muted mb-md">控制"冲刺/稳妥/保底"的分类边界（以位次百分比表示）</p>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>冲刺下限</label>
+                    <input type="number" id="set-reachMin" value="${(s.matchThresholds.reachMin * 100).toFixed(1)}" step="0.1" min="0" max="100">
+                    <div class="hint">位次差距大于此值才算冲刺（默认 3%）</div>
+                </div>
+                <div class="form-group">
+                    <label>冲刺上限</label>
+                    <input type="number" id="set-reachMax" value="${(s.matchThresholds.reachMax * 100).toFixed(1)}" step="0.1" min="0" max="100">
+                    <div class="hint">位次差距超过此值不再推荐（默认 20%）</div>
+                </div>
+                <div class="form-group">
+                    <label>保底阈值</label>
+                    <input type="number" id="set-safetyMax" value="${(Math.abs(s.matchThresholds.safetyMax) * 100).toFixed(1)}" step="0.1" min="0" max="100">
+                    <div class="hint">位次优势超过此值算保底（默认 10%）</div>
+                </div>
+            </div>
+            <div class="hint mb-md">说明：例如你的位次12000，历史录取位次10000，位次差距=(12000-10000)/10000=+20%，属于"冲刺"</div>
+            <div class="flex-row gap-sm">
+                <button class="btn btn-secondary btn-sm" id="btn-reset-thresholds">恢复默认阈值</button>
+            </div>
+        </div>
+
+        <div class="flex-row gap-sm mb-lg">
+            <button class="btn btn-primary" id="btn-save-settings">💾 保存设置</button>
+        </div>
+    `;
+
+    Settings._bindEvents(container);
+    Settings._updateModeUI(s.gaokaoMode);
+};
+
+Settings._bindEvents = function () {
+    // Mode change
+    $$('input[name="gaokaoMode"]').forEach(r => {
+        r.onchange = () => {
+            Settings._updateModeUI(r.value);
+            $$('input[name="gaokaoMode"]').forEach(rr => {
+                rr.parentElement.classList.toggle('checked', rr.checked);
+            });
+        };
+    });
+
+    // Primary subject radios
+    $$('input[name="primarySubject"]').forEach(r => {
+        r.onchange = () => {
+            $$('input[name="primarySubject"]').forEach(rr => {
+                rr.parentElement.classList.toggle('checked', rr.checked);
+            });
+        };
+    });
+
+    // Score type radios
+    $$('input[name="scoreType"]').forEach(r => {
+        r.onchange = () => {
+            $$('input[name="scoreType"]').forEach(rr => {
+                rr.parentElement.classList.toggle('checked', rr.checked);
+            });
+        };
+    });
+
+    // Elective checkboxes
+    $$('#set-elective-group .checkbox-label').forEach(label => {
+        label.onclick = function (e) {
+            e.preventDefault(); // 阻止浏览器对label内checkbox的默认切换行为
+            const cb = this.querySelector('input');
+            cb.checked = !cb.checked;
+            cb.dispatchEvent(new Event('change', { bubbles: true }));
+        };
+    });
+    $$('#set-elective-group input[type="checkbox"]').forEach(cb => {
+        cb.onchange = function () {
+            const mode = document.querySelector('input[name="gaokaoMode"]:checked').value;
+            const maxCount = mode === '3+1+2' ? 2 : mode === '3+3' ? 3 : 6;
+            const checked = $$('#set-elective-group input[type="checkbox"]:checked');
+            if (checked.length > maxCount) {
+                this.checked = false;
+                document.getElementById('err-electives').textContent = `${mode} 模式最多选 ${maxCount} 科`;
+                document.getElementById('err-electives').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('err-electives').classList.add('hidden');
+            this.parentElement.classList.toggle('checked', this.checked);
+        };
+    });
+
+    // Reset thresholds
+    document.getElementById('btn-reset-thresholds').onclick = function () {
+        const def = Models.getDefaultSettings().matchThresholds;
+        document.getElementById('set-reachMin').value = (def.reachMin * 100).toFixed(1);
+        document.getElementById('set-reachMax').value = (def.reachMax * 100).toFixed(1);
+        document.getElementById('set-safetyMax').value = (Math.abs(def.safetyMax) * 100).toFixed(1);
+        showToast('已恢复默认阈值', 'info');
+    };
+
+    // Save
+    document.getElementById('btn-save-settings').onclick = function () {
+        const mode = document.querySelector('input[name="gaokaoMode"]:checked').value;
+        const maxElectives = mode === '3+1+2' ? 2 : mode === '3+3' ? 3 : 6;
+        const electives = $$('#set-elective-group input[type="checkbox"]:checked').map(cb => cb.value);
+
+        if (electives.length > maxElectives) {
+            showToast(`${mode} 模式最多选 ${maxElectives} 科`, 'error');
+            return;
+        }
+
+        const settings = {
+            province: document.getElementById('set-province').value,
+            gaokaoMode: mode,
+            primarySubject: mode === '3+3' ? null : (document.querySelector('input[name="primarySubject"]:checked') || {}).value || '物理',
+            electiveSubjects: electives,
+            userScore: document.getElementById('set-score').value ? parseInt(document.getElementById('set-score').value) : null,
+            userRank: document.getElementById('set-rank').value ? parseInt(document.getElementById('set-rank').value) : null,
+            scoreType: (document.querySelector('input[name="scoreType"]:checked') || {}).value || 'estimated',
+            matchThresholds: {
+                reachMin: parseFloat(document.getElementById('set-reachMin').value) / 100,
+                reachMax: parseFloat(document.getElementById('set-reachMax').value) / 100,
+                safetyMax: -Math.abs(parseFloat(document.getElementById('set-safetyMax').value) / 100)
+            }
+        };
+
+        Store.setSettings(settings);
+        showToast('设置已保存！', 'success');
+        App.updateStatusBar();
+    };
+};
+
+Settings._updateModeUI = function (mode) {
+    const primaryRow = document.getElementById('set-primary-row');
+    if (primaryRow) {
+        primaryRow.style.display = mode === '3+3' ? 'none' : '';
+    }
+    // Update elective hint
+    const group = document.getElementById('set-elective-group');
+    if (group) {
+        const maxCount = mode === '3+1+2' ? 2 : mode === '3+3' ? 3 : 6;
+        const hintEl = group.previousElementSibling;
+        if (hintEl && hintEl.tagName === 'LABEL') {
+            const suffix = mode === '3+1+2' ? '(3+1+2 中的 "2"，最多选2科)' : mode === '3+3' ? '(最多选3科)' : '';
+            hintEl.innerHTML = hintEl.innerHTML.replace(/\(.*\)/, suffix);
+        }
+    }
+};
+
+// ===== js/app.js =====
+// ===== Application Bootstrap =====
+
+const App = {};
+
+App.currentTab = 'data-entry';
+
+App.init = function () {
+    // Initialize data (triggers demo data seeding if empty)
+    Store.getUniversities();
+
+    // Determine initial tab
+    const settings = Store.getSettings();
+    if (!settings.province) {
+        App.currentTab = 'settings';
+    }
+
+    // Wire tab nav
+    $$('#tab-nav .tab-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            App.switchTab(this.dataset.tab);
+        });
+    });
+
+    // Render initial tab
+    App.switchTab(App.currentTab);
+
+    // Update status bar
+    App.updateStatusBar();
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function (e) {
+        // Escape to close modal
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('modal-container');
+            if (!modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        }
+    });
+};
+
+App.switchTab = function (tabName) {
+    App.currentTab = tabName;
+
+    // Update tab buttons
+    $$('#tab-nav .tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabName);
+    });
+
+    // Render tab content
+    const container = document.getElementById('tab-content');
+    clearElement(container);
+
+    switch (tabName) {
+        case 'data-entry':
+            DataEntry.render(container);
+            break;
+        case 'recommendations':
+            Recommendations.render(container);
+            break;
+        case 'data-manage':
+            DataManage.render(container);
+            break;
+        case 'settings':
+            Settings.render(container);
+            break;
+        default:
+            container.innerHTML = '<div class="empty-state"><p>未知页面</p></div>';
+    }
+
+    App.updateStatusBar();
+};
+
+App.updateStatusBar = function () {
+    const unis = Store.getUniversities();
+    const records = Store.getRecords();
+    const settings = Store.getSettings();
+
+    let info = [];
+    info.push(`${unis.length} 所学校`);
+    info.push(`${records.length} 条记录`);
+
+    if (settings.province) {
+        info.push(settings.province);
+    }
+
+    if (settings.primarySubject && settings.gaokaoMode === '3+1+2') {
+        info.push(`${settings.primarySubject}+${settings.electiveSubjects.join('/')}`);
+    }
+
+    if (settings.userScore != null) {
+        info.push(`${settings.scoreType === 'estimated' ? '估分' : '成绩'}：${settings.userScore}分`);
+    }
+
+    if (settings.userRank != null) {
+        info.push(`位次：${formatNumber(settings.userRank)}`);
+    }
+
+    document.getElementById('status-bar').innerHTML = `<span>📊 ${info.join(' · ')}</span><span>越进的高考志愿助手 v1.0</span>`;
+};
+
+// ===== Start on DOM Ready =====
+document.addEventListener('DOMContentLoaded', function () {
+    App.init();
+});
+
+</script>
+</body>
+</html>
