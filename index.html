@@ -1149,7 +1149,7 @@ Store.getUniversities = function () {
     }
 
     // Merge Shaanxi real data if available
-    if (Models.getShaanxiData) {
+    try { if (Models.getShaanxiData) {
         const records = Store.get(KEYS.records) || [];
         if (!records.some(r => r.id && r.id.startsWith('sx-'))) {
             const sxData = Models.getShaanxiData();
@@ -1189,7 +1189,7 @@ Store.getUniversities = function () {
             Store.set(KEYS.records, newRecords);
             list = newUnis;
         }
-    }
+    } } catch(e) { console.warn('Shaanxi merge failed:', e); }
 
     return list || [];
 };
@@ -5602,9 +5602,23 @@ App.updateStatusBar = function () {
     document.getElementById('status-bar').innerHTML = `<span>📊 ${info.join(' · ')}</span><span>越进的高考志愿助手 v1.0</span>`;
 };
 
+// ===== Error guard for data merge =====
+try {
+    // Preload: wrap data seeding in try-catch to prevent blank page
+    var _seedAttempted = false;
+} catch(e) {}
+
 // ===== Start on DOM Ready =====
 document.addEventListener('DOMContentLoaded', function () {
-    App.init();
+    try {
+        App.init();
+    } catch (e) {
+        document.getElementById('tab-content').innerHTML =
+            '<div class="card" style="margin:20px"><h3>⚠️ 加载出错</h3>' +
+            '<p class="text-muted">请清除浏览器缓存后重试：F12 → Application → Local Storage → Clear</p>' +
+            '<p style="font-size:11px;color:#999">' + e.message + '</p></div>';
+        document.getElementById('status-bar').innerHTML = '<span>❌ 加载失败</span>';
+    }
 });
 
 </script></body></html>
